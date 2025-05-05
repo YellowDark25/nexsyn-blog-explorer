@@ -2,6 +2,23 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Post } from "@/types/Post";
 
+/**
+ * Normaliza categoria para slug seguro
+ * Ex: "Gestão Interna" → "gestao-interna"
+ */
+function normalizeCategorySlug(categoria?: string): string | undefined {
+  if (!categoria) return undefined;
+
+  return categoria
+    .normalize('NFD') // separa acentos
+    .replace(/[\u0300-\u036f]/g, '') // remove acentos
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-') // espaços -> hífen
+    .replace(/[^\w\-]/g, ''); // remove símbolos
+}
+
+
 export async function getPosts(limit = 6, category?: string) {
   try {
     let query = supabase
@@ -12,7 +29,8 @@ export async function getPosts(limit = 6, category?: string) {
       .limit(limit);
     
     if (category) {
-      query = query.eq('categoria', category);
+      const categoriaNormalizada = normalizeCategorySlug(category);
+      query = query.eq('categoria', categoriaNormalizada);
     }
     
     const { data, error } = await query;
