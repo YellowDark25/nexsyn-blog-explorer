@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
+import { getCategories } from '@/services/postService';
+import { useToast } from '@/hooks/use-toast';
 
-interface Category {
-  id: number;
+interface CategoryWithCount {
   name: string;
   slug: string;
   count: number;
@@ -16,14 +17,7 @@ interface Archive {
   count: number;
 }
 
-const categories: Category[] = [
-  { id: 1, name: 'Gestão Interna', slug: 'gestao-interna', count: 12 },
-  { id: 2, name: 'Tecnologia', slug: 'tecnologia', count: 8 },
-  { id: 3, name: 'Foodservice', slug: 'foodservice', count: 10 },
-  { id: 4, name: 'Inteligência Artificial', slug: 'inteligencia-artificial', count: 5 },
-  { id: 5, name: 'Empresas Alimentícias', slug: 'empresas-alimenticias', count: 7 },
-];
-
+// Dados temporários para os arquivos
 const archives: Archive[] = [
   { id: 1, month: 'Maio 2025', count: 4 },
   { id: 2, month: 'Abril 2025', count: 6 },
@@ -34,11 +28,42 @@ const archives: Archive[] = [
 
 const BlogSidebar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [categories, setCategories] = useState<CategoryWithCount[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        
+        // Converter categorias para o formato esperado com contagens fictícias por enquanto
+        const categoriesWithCount: CategoryWithCount[] = data.map((cat, index) => ({
+          name: cat,
+          slug: cat.toLowerCase().replace(/\s+/g, '-'),
+          count: 5 + Math.floor(Math.random() * 10) // Contagem fictícia entre 5-14
+        }));
+        
+        setCategories(categoriesWithCount);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        toast({
+          title: 'Erro',
+          description: 'Não foi possível carregar as categorias',
+          variant: 'destructive',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, [toast]);
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Searching for:', searchTerm);
-    // In a real application, this would trigger a search query
+    // Em uma aplicação real, isso acionaria uma pesquisa
   };
   
   return (
@@ -63,21 +88,29 @@ const BlogSidebar: React.FC = () => {
       {/* Categories */}
       <div className="bg-card rounded-md p-5 shadow-md">
         <h3 className="text-xl font-bold text-primary mb-4">Categorias</h3>
-        <ul className="space-y-2">
-          {categories.map(category => (
-            <li key={category.id} className="flex items-center justify-between">
-              <Link 
-                to={`/blog/${category.slug}`} 
-                className="text-foreground hover:text-primary animate-hover"
-              >
-                {category.name}
-              </Link>
-              <span className="bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">
-                {category.count}
-              </span>
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <div className="space-y-2">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="h-6 bg-muted rounded animate-pulse"></div>
+            ))}
+          </div>
+        ) : (
+          <ul className="space-y-2">
+            {categories.map((category, index) => (
+              <li key={index} className="flex items-center justify-between">
+                <Link 
+                  to={`/blog/${category.slug}`} 
+                  className="text-foreground hover:text-primary animate-hover"
+                >
+                  {category.name}
+                </Link>
+                <span className="bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">
+                  {category.count}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       
       {/* Archives */}

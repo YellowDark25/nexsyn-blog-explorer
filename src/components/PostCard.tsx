@@ -13,13 +13,13 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const formattedDate = format(parseISO(post.data_publicacao), 'dd MMM yyyy', { locale: ptBR });
   
   return (
-    <article className="bg-card rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] h-full flex flex-col">
+    <article className="bg-card rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] h-full flex flex-col blog-card-hover">
       <Link to={`/posts/${post.slug}`} className="block overflow-hidden">
-        <div className="h-48 overflow-hidden">
+        <div className="h-48 overflow-hidden blog-card-image">
           <img 
             src={post.imagem_destaque} 
             alt={post.titulo}
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            className="w-full h-full object-cover"
           />
         </div>
       </Link>
