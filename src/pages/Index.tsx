@@ -22,7 +22,7 @@ const Index = () => {
   useEffect(() => {
     if (category) {
       const filtered = mockPosts.filter(post => 
-        post.category.name.toLowerCase().replace(/\s+/g, '-') === category
+        post.categoria.toLowerCase().replace(/\s+/g, '-') === category
       );
       setFilteredPosts(filtered);
       setPage(1);
