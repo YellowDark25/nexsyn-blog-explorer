@@ -18,7 +18,7 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4 mt-4">
               <a 
-                href="https://www.instagram.com/nexsyn.oficial/" 
+                href="https://www.instagram.com/nexsyn.si/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-foreground hover:text-primary animate-hover"
@@ -27,7 +27,7 @@ const Footer = () => {
                 <Instagram />
               </a>
               <a 
-                href="https://www.youtube.com/" 
+                href="https://www.youtube.com/@SomosNexsyn" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-foreground hover:text-primary animate-hover"
