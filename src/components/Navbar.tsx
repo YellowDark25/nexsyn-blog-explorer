@@ -1,45 +1,26 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle
-} from "@/components/ui/navigation-menu";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { Instagram } from 'lucide-react';
-
 interface NavbarProps {
   onContactClick?: () => void;
 }
-
-const Navbar = ({ onContactClick }: NavbarProps) => {
+const Navbar = ({
+  onContactClick
+}: NavbarProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
-
-  return (
-    <header className="sticky top-0 z-50 w-full bg-nexsyn-darkBlue border-b border-border/40 py-3 shadow-md">
+  return <header className="sticky top-0 z-50 w-full bg-nexsyn-darkBlue border-b border-border/40 py-3 shadow-md">
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <img 
-            src="/nexsyn-logo.png" 
-            alt="Nexsyn Logo" 
-            className="h-10"
-          />
+          <img alt="Nexsyn Logo" className="h-10" src="/lovable-uploads/2413e882-78d7-43eb-8317-c8ec49076e7c.png" />
         </Link>
         
         {/* Mobile menu button */}
         <div className="md:hidden">
-          <button 
-            className="text-foreground hover:text-primary"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-          >
+          <button className="text-foreground hover:text-primary" onClick={toggleMobileMenu} aria-label="Toggle menu">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -97,22 +78,13 @@ const Navbar = ({ onContactClick }: NavbarProps) => {
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <button 
-                  onClick={onContactClick} 
-                  className={navigationMenuTriggerStyle()}
-                >
+                <button onClick={onContactClick} className={navigationMenuTriggerStyle()}>
                   Contate-nos
                 </button>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <a 
-                  href="https://www.instagram.com/nexsyn.oficial/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none"
-                  aria-label="Instagram"
-                >
+                <a href="https://www.instagram.com/nexsyn.oficial/" target="_blank" rel="noopener noreferrer" className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none" aria-label="Instagram">
                   <Instagram className="h-5 w-5" />
                 </a>
               </NavigationMenuItem>
@@ -121,8 +93,7 @@ const Navbar = ({ onContactClick }: NavbarProps) => {
         </div>
         
         {/* Mobile Navigation Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-nexsyn-darkBlue border-b border-border pt-2 pb-4 px-4 shadow-lg z-50">
+        {mobileMenuOpen && <div className="md:hidden absolute top-full left-0 right-0 bg-nexsyn-darkBlue border-b border-border pt-2 pb-4 px-4 shadow-lg z-50">
             <nav className="flex flex-col space-y-3">
               <Link to="/" className="text-foreground hover:text-primary py-2" onClick={() => setMobileMenuOpen(false)}>
                 Home
@@ -161,30 +132,19 @@ const Navbar = ({ onContactClick }: NavbarProps) => {
                   </a>
                 </div>
               </div>
-              <button 
-                onClick={() => {
-                  onContactClick?.();
-                  setMobileMenuOpen(false);
-                }} 
-                className="text-foreground hover:text-primary py-2"
-              >
+              <button onClick={() => {
+            onContactClick?.();
+            setMobileMenuOpen(false);
+          }} className="text-foreground hover:text-primary py-2">
                 Contate-nos
               </button>
-              <a 
-                href="https://www.instagram.com/nexsyn.oficial/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-foreground hover:text-primary py-2 flex items-center gap-2"
-              >
+              <a href="https://www.instagram.com/nexsyn.oficial/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary py-2 flex items-center gap-2">
                 <Instagram className="h-5 w-5" />
                 <span>Instagram</span>
               </a>
             </nav>
-          </div>
-        )}
+          </div>}
       </div>
-    </header>
-  );
+    </header>;
 };
-
 export default Navbar;
