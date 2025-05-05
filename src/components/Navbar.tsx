@@ -5,7 +5,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
@@ -123,30 +122,30 @@ const Navbar = ({ onContactClick }: NavbarProps) => {
         
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-nexsyn-darkBlue border-b border-border pt-2 pb-4 px-4 shadow-lg">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-nexsyn-darkBlue border-b border-border pt-2 pb-4 px-4 shadow-lg z-50">
             <nav className="flex flex-col space-y-3">
-              <Link to="/" className="text-foreground hover:text-primary py-2">
+              <Link to="/" className="text-foreground hover:text-primary py-2" onClick={() => setMobileMenuOpen(false)}>
                 Home
               </Link>
               <div className="py-2">
                 <div className="font-medium text-foreground mb-2">Blogs</div>
                 <div className="pl-4 flex flex-col space-y-2">
-                  <Link to="/blog" className="text-muted-foreground hover:text-primary">
+                  <Link to="/blog" className="text-muted-foreground hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
                     Todos os Blogs
                   </Link>
-                  <Link to="/blog/gestao-interna" className="text-muted-foreground hover:text-primary">
+                  <Link to="/blog/gestao-interna" className="text-muted-foreground hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
                     Gestão Interna
                   </Link>
-                  <Link to="/blog/tecnologia" className="text-muted-foreground hover:text-primary">
+                  <Link to="/blog/tecnologia" className="text-muted-foreground hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
                     Tecnologia
                   </Link>
-                  <Link to="/blog/foodservice" className="text-muted-foreground hover:text-primary">
+                  <Link to="/blog/foodservice" className="text-muted-foreground hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
                     Foodservice
                   </Link>
-                  <Link to="/blog/inteligencia-artificial" className="text-muted-foreground hover:text-primary">
+                  <Link to="/blog/inteligencia-artificial" className="text-muted-foreground hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
                     Inteligência Artificial
                   </Link>
-                  <Link to="/blog/empresas-alimenticias" className="text-muted-foreground hover:text-primary">
+                  <Link to="/blog/empresas-alimenticias" className="text-muted-foreground hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
                     Empresas Alimentícias
                   </Link>
                 </div>

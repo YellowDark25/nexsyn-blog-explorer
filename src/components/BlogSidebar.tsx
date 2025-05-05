@@ -1,11 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
 
 interface Category {
   id: number;
   name: string;
+  slug: string;
   count: number;
 }
 
@@ -16,11 +17,11 @@ interface Archive {
 }
 
 const categories: Category[] = [
-  { id: 1, name: 'Gestão Interna', count: 12 },
-  { id: 2, name: 'Tecnologia', count: 8 },
-  { id: 3, name: 'Foodservice', count: 10 },
-  { id: 4, name: 'Inteligência Artificial', count: 5 },
-  { id: 5, name: 'Empresas Alimentícias', count: 7 },
+  { id: 1, name: 'Gestão Interna', slug: 'gestao-interna', count: 12 },
+  { id: 2, name: 'Tecnologia', slug: 'tecnologia', count: 8 },
+  { id: 3, name: 'Foodservice', slug: 'foodservice', count: 10 },
+  { id: 4, name: 'Inteligência Artificial', slug: 'inteligencia-artificial', count: 5 },
+  { id: 5, name: 'Empresas Alimentícias', slug: 'empresas-alimenticias', count: 7 },
 ];
 
 const archives: Archive[] = [
@@ -32,12 +33,12 @@ const archives: Archive[] = [
 ];
 
 const BlogSidebar: React.FC = () => {
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Searching for:', searchTerm);
-    // In a real WordPress site, this would trigger a search query
+    // In a real application, this would trigger a search query
   };
   
   return (
@@ -59,8 +60,6 @@ const BlogSidebar: React.FC = () => {
         </form>
       </div>
       
-      {/* Recent Posts component would be added here */}
-      
       {/* Categories */}
       <div className="bg-card rounded-md p-5 shadow-md">
         <h3 className="text-xl font-bold text-primary mb-4">Categorias</h3>
@@ -68,7 +67,7 @@ const BlogSidebar: React.FC = () => {
           {categories.map(category => (
             <li key={category.id} className="flex items-center justify-between">
               <Link 
-                to={`/category/${category.id}`} 
+                to={`/blog/${category.slug}`} 
                 className="text-foreground hover:text-primary animate-hover"
               >
                 {category.name}

@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import BlogCard from '../components/BlogCard';
 import BlogSidebar from '../components/BlogSidebar';
 import LoadMoreButton from '../components/LoadMoreButton';
+import ScrollToTop from '../components/ScrollToTop';
 import { mockPosts } from '../data/mockPosts';
 import { Post } from '../types/Post';
 
@@ -109,6 +110,7 @@ const Index = () => {
       </main>
       
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };

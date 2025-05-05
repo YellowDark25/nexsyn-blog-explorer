@@ -69,7 +69,26 @@
   }
   
   .blog-card-hover {
-    @apply hover:shadow-lg hover:shadow-primary/20 hover:translate-y-[-4px] animate-hover;
+    @apply hover:shadow-lg hover:shadow-primary/20 hover:translate-y-[-4px] animate-hover relative;
+    position: relative;
+  }
+
+  /* Neon orange border effect when hovering over blog cards */
+  .blog-card-hover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 3px;
+    background: hsl(var(--primary));
+    transform: scaleX(0);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 0 10px 1px hsl(var(--primary));
+  }
+  
+  .blog-card-hover:hover::after {
+    transform: scaleX(1);
   }
 
   .blog-card-image {
@@ -78,5 +97,20 @@
   
   .blog-card-image img {
     @apply hover:scale-105 animate-hover;
+  }
+
+  /* Scroll to top button animation */
+  .scroll-to-top {
+    @apply fixed bottom-8 right-8 bg-primary text-white p-3 rounded-full shadow-lg z-40 opacity-0 invisible;
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+  }
+
+  .scroll-to-top.visible {
+    @apply opacity-100 visible;
+    transform: translateY(0);
+  }
+
+  .scroll-to-top.hidden {
+    transform: translateY(20px);
   }
 }
