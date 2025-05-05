@@ -13,7 +13,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const formattedDate = format(parseISO(post.data_publicacao), 'dd MMM yyyy', { locale: ptBR });
   
   return (
-    <article className="bg-card rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] h-full flex flex-col blog-card-hover">
+    <article className="bg-card rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] h-full flex flex-col relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent hover:after:bg-orange-500 hover:after:glow-orange-500 after:transition-all after:duration-300">
       <Link to={`/posts/${post.slug}`} className="block overflow-hidden">
         <div className="h-48 overflow-hidden blog-card-image">
           <img 

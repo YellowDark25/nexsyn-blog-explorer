@@ -34,6 +34,7 @@ const BlogPage = () => {
             .join(' ');
         }
         
+        console.log(`Fetching posts with category: ${categoryName || 'All'}`);
         const data = await getPosts(postsPerPage * page, categoryName);
         setPosts(data);
         setHasMore(data.length === postsPerPage * page);

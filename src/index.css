@@ -1,130 +1,108 @@
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+ 
 @layer base {
   :root {
-    --background: 215 60% 8%; /* Dark blue background */
-    --foreground: 0 0% 100%;  /* White text */
-    
-    --primary: 25 95% 53%;    /* Orange #f36405 */
-    --primary-foreground: 0 0% 100%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-    --card: 217 54% 12%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --primary: 16 85% 49%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-    --popover: 215 60% 8%;
-    --popover-foreground: 0 0% 100%;
-
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 80%;
-
-    --accent: 217 33% 17%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
-    --ring: 25 95% 53%; /* Orange ring */
-
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+ 
     --radius: 0.5rem;
-
-    --sidebar-background: 217 54% 12%; 
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 25 95% 53%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 17%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 217 33% 20%;
-    --sidebar-ring: 25 95% 53%;
+    
+    --nexsyn-darkBlue: 216, 100%, 8%;
+  }
+ 
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 16 85% 49%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
-
+ 
 @layer base {
   * {
     @apply border-border;
   }
-  
   body {
-    @apply bg-background text-foreground font-sansation;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-poppins;
+    @apply bg-background text-foreground;
   }
 }
 
-@layer utilities {
-  .animate-hover {
-    @apply transition-all duration-300 ease-in-out;
-  }
-  
-  .blog-card-hover {
-    @apply hover:shadow-lg hover:shadow-primary/20 hover:translate-y-[-4px] animate-hover relative;
-    position: relative;
-  }
+.animate-hover {
+  @apply transition-all duration-300;
+}
 
-  /* Neon orange border effect when hovering over blog cards */
-  .blog-card-hover::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    right: 10%;
-    height: 3px;
-    background: hsl(var(--primary));
-    transform: scaleX(0);
-    transition: transform 0.3s ease-in-out;
-    box-shadow: 0 0 10px 1px hsl(var(--primary));
-  }
-  
-  .blog-card-hover:hover::after {
-    transform: scaleX(1);
-  }
+.blog-card-image img {
+  @apply transition-transform duration-500;
+}
 
-  .blog-card-image {
-    @apply overflow-hidden rounded-t-md;
-  }
-  
-  .blog-card-image img {
-    @apply hover:scale-105 animate-hover;
-  }
+.blog-card-hover:hover .blog-card-image img {
+  @apply scale-110;
+}
 
-  /* Scroll to top button animation - fixed to avoid circular dependency */
-  .scroll-to-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: hsl(var(--primary));
-    color: white;
-    padding: 0.75rem;
-    border-radius: 9999px;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    z-index: 40;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
-  }
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 40;
+}
 
-  .scroll-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
+.scroll-to-top.show {
+  opacity: 1;
+}
 
-  .scroll-to-top.hidden {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-  }
+.glow-orange-500 {
+  box-shadow: 0 0 10px theme('colors.orange.500');
 }
