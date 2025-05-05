@@ -11,7 +11,9 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold text-primary mb-4">NEXSYN</h3>
+            <h3 className="text-xl font-bold text-primary mb-4">
+              <img alt="Nexsyn Logo" className="h-10" src="/lovable-uploads/2413e882-78d7-43eb-8317-c8ec49076e7c.png" />
+            </h3>
             <p className="text-muted-foreground">
               Soluções inteligentes para empresas alimentícias e 
               gestão de processos de negócios.
