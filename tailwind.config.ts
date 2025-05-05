@@ -65,12 +65,14 @@ export default {
 				},
 				nexsyn: {
 					orange: '#f36405',
-					darkBlue: '#021b3a',
+					darkBlue: '#031730',
 					blue: '#15304f',
 				}
 			},
 			fontFamily: {
 				'dm-sans': ['"DM Sans"', 'sans-serif'],
+				'poppins': ['"Poppins"', 'sans-serif'],
+				'sansation': ['"Sansation"', 'sans-serif'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -109,8 +111,46 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.5s ease-out forwards'
-			}
+			},
+			typography: {
+				DEFAULT: {
+					css: {
+						maxWidth: '100%',
+						color: 'hsl(var(--foreground))',
+						h1: {
+							color: 'hsl(var(--foreground))',
+							fontFamily: '"Poppins", sans-serif',
+						},
+						h2: {
+							color: 'hsl(var(--foreground))',
+							fontFamily: '"Poppins", sans-serif',
+						},
+						h3: {
+							color: 'hsl(var(--foreground))',
+							fontFamily: '"Poppins", sans-serif',
+						},
+						h4: {
+							color: 'hsl(var(--foreground))',
+							fontFamily: '"Poppins", sans-serif',
+						},
+						p: {
+							color: 'hsl(var(--foreground))'
+						},
+						a: {
+							color: 'hsl(var(--primary))',
+							'&:hover': {
+								color: 'hsl(var(--primary))',
+								opacity: '0.8',
+							},
+						},
+						blockquote: {
+							color: 'hsl(var(--foreground))',
+							borderColor: 'hsl(var(--primary))',
+						},
+					},
+				},
+			},
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography')],
 } satisfies Config;

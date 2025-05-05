@@ -1,116 +1,124 @@
 
-import React from 'react';
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
-
-const formSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório"),
-  email: z.string().email("Email inválido"),
-  phone: z.string().min(8, "Telefone precisa ter pelo menos 8 dígitos"),
-  company: z.string().min(1, "Nome da empresa é obrigatório"),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import React, { useState } from 'react';
+import { Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 
 const ContactForm = () => {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      company: "",
-    },
+  const [formData, setFormData] = useState({
+    nome: '',
+    email: '',
+    telefone: '',
+    empresa: '',
+    mensagem: '',
   });
+  const [submitting, setSubmitting] = useState(false);
+  const { toast } = useToast();
 
-  const onSubmit = (values: FormValues) => {
-    console.log("Form submitted:", values);
-    toast({
-      title: "Formulário enviado!",
-      description: "Entraremos em contato em breve.",
-    });
-    form.reset();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      // In a real implementation, send this data to your backend or email service
+      console.log('Form data submitted:', formData);
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: 'Mensagem enviada',
+        description: 'Agradecemos seu contato! Retornaremos em breve.',
+      });
+      
+      setFormData({
+        nome: '',
+        email: '',
+        telefone: '',
+        empresa: '',
+        mensagem: '',
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: 'Erro',
+        description: 'Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.',
+        variant: 'destructive',
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <section className="py-16 bg-muted" id="contact">
+    <section id="contato" className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-          ENTRE EM CONTATO
-        </h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 font-poppins">ENTRE EM CONTATO</h2>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Contact Information */}
-          <div className="p-6 rounded-lg">
-            <h3 className="text-xl font-semibold mb-6">Informações de Contato</h3>
+          <div className="bg-card p-8 rounded-lg shadow-md">
+            <h3 className="text-xl font-bold mb-6 font-poppins">Você pode nos encontrar aqui</h3>
             
             <div className="space-y-6">
-              <div className="flex items-start space-x-3">
-                <Mail className="h-5 w-5 text-primary mt-1" />
+              <div className="flex items-start space-x-4">
+                <Mail className="text-primary h-5 w-5 mt-0.5" />
                 <div>
                   <h4 className="font-medium">Email</h4>
-                  <a href="mailto:nexsyn@unidadelrv.com.br" className="text-muted-foreground hover:text-primary">
+                  <a href="mailto:nexsyn@unidadelrv.com.br" className="text-muted-foreground hover:text-primary transition-colors">
                     nexsyn@unidadelrv.com.br
                   </a>
                 </div>
               </div>
               
-              <div className="flex items-start space-x-3">
-                <Phone className="h-5 w-5 text-primary mt-1" />
+              <div className="flex items-start space-x-4">
+                <Phone className="text-primary h-5 w-5 mt-0.5" />
                 <div>
                   <h4 className="font-medium">Telefone</h4>
-                  <a href="tel:+556592934536" className="text-muted-foreground hover:text-primary">
+                  <a href="tel:+556592934536" className="text-muted-foreground hover:text-primary transition-colors">
                     +55 65 9293-4536
                   </a>
                 </div>
               </div>
               
-              <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-primary mt-1" />
+              <div className="flex items-start space-x-4">
+                <MapPin className="text-primary h-5 w-5 mt-0.5" />
                 <div>
                   <h4 className="font-medium">Endereço</h4>
-                  <address className="not-italic text-muted-foreground">
-                    Sala Comercial Espelhada,<br/>
-                    Av. Dep. Hitler Sansão – Centro,<br/>
+                  <address className="text-muted-foreground not-italic">
+                    Sala Comercial Espelhada, Av. Dep. Hitler Sansão – Centro, <br />
                     Barra do Bugres – MT, 78390-000
                   </address>
                 </div>
               </div>
               
-              <div>
-                <h4 className="font-medium mb-3">Redes Sociais</h4>
+              <div className="pt-4">
+                <h4 className="font-medium mb-3">Siga-nos</h4>
                 <div className="flex space-x-4">
                   <a 
                     href="https://www.instagram.com/nexsyn.oficial/" 
-                    target="_blank"
+                    target="_blank" 
                     rel="noopener noreferrer"
-                    className="p-2 bg-accent rounded-full hover:bg-primary hover:text-white transition-colors"
+                    className="bg-card text-foreground hover:text-primary p-2 rounded-full transition-colors"
                     aria-label="Instagram"
                   >
-                    <Instagram className="h-5 w-5" />
+                    <Instagram className="h-6 w-6" />
                   </a>
                   <a 
                     href="https://www.youtube.com/" 
-                    target="_blank"
+                    target="_blank" 
                     rel="noopener noreferrer"
-                    className="p-2 bg-accent rounded-full hover:bg-primary hover:text-white transition-colors"
+                    className="bg-card text-foreground hover:text-primary p-2 rounded-full transition-colors"
                     aria-label="YouTube"
                   >
-                    <Youtube className="h-5 w-5" />
+                    <Youtube className="h-6 w-6" />
                   </a>
                 </div>
               </div>
@@ -118,70 +126,65 @@ const ContactForm = () => {
           </div>
           
           {/* Contact Form */}
-          <div className="bg-card p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-6">Envie uma mensagem</h3>
+          <div className="bg-card p-8 rounded-lg shadow-md">
+            <h3 className="text-xl font-bold mb-6 font-poppins">Envie uma mensagem</h3>
             
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nome</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Seu nome" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Input
+                  name="nome"
+                  placeholder="Nome"
+                  value={formData.nome}
+                  onChange={handleChange}
+                  required
                 />
-                
-                <FormField
-                  control={form.control}
+              </div>
+              <div>
+                <Input
                   name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="seu.email@exemplo.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  type="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
                 />
-                
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Telefone</FormLabel>
-                      <FormControl>
-                        <Input placeholder="(00) 00000-0000" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+              </div>
+              <div>
+                <Input
+                  name="telefone"
+                  placeholder="Telefone"
+                  value={formData.telefone}
+                  onChange={handleChange}
+                  required
                 />
-                
-                <FormField
-                  control={form.control}
-                  name="company"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nome da Empresa</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nome da sua empresa" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+              </div>
+              <div>
+                <Input
+                  name="empresa"
+                  placeholder="Nome da empresa"
+                  value={formData.empresa}
+                  onChange={handleChange}
+                  required
                 />
-                
-                <Button type="submit" className="w-full">Enviar</Button>
-              </form>
-            </Form>
+              </div>
+              <div>
+                <Textarea
+                  name="mensagem"
+                  placeholder="Sua mensagem"
+                  value={formData.mensagem}
+                  onChange={handleChange}
+                  rows={4}
+                />
+              </div>
+              
+              <Button
+                type="submit"
+                className="w-full bg-primary hover:bg-primary/90"
+                disabled={submitting}
+              >
+                {submitting ? 'Enviando...' : 'Enviar'}
+              </Button>
+            </form>
           </div>
         </div>
       </div>

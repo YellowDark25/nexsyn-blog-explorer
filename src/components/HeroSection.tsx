@@ -22,12 +22,12 @@ const HeroSection = () => {
       
       {/* Content */}
       <div className="container mx-auto px-6 relative z-20 text-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-4xl mx-auto leading-tight drop-shadow-xl animate-fade-in">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-4xl mx-auto leading-tight drop-shadow-xl font-poppins animate-fade-in">
           Quantas vendas você perde por não conseguir atender todos os clientes?
         </h1>
         <div className="mt-8 flex justify-center">
           <a 
-            href="#sobre" 
+            href="#contato" 
             className="px-6 py-3 bg-primary text-white rounded-md hover:bg-primary/90 transition-all duration-300 font-medium"
           >
             Saiba Mais

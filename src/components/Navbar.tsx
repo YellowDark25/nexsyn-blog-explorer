@@ -24,10 +24,14 @@ const Navbar = ({ onContactClick }: NavbarProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background border-b border-border/40 py-3 shadow-md">
+    <header className="sticky top-0 z-50 w-full bg-nexsyn-darkBlue border-b border-border/40 py-3 shadow-md">
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <span className="text-3xl font-bold text-primary">NEXSYN</span>
+          <img 
+            src="/nexsyn-logo.png" 
+            alt="Nexsyn Logo" 
+            className="h-10"
+          />
         </Link>
         
         {/* Mobile menu button */}
@@ -119,7 +123,7 @@ const Navbar = ({ onContactClick }: NavbarProps) => {
         
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border pt-2 pb-4 px-4 shadow-lg">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-nexsyn-darkBlue border-b border-border pt-2 pb-4 px-4 shadow-lg">
             <nav className="flex flex-col space-y-3">
               <Link to="/" className="text-foreground hover:text-primary py-2">
                 Home

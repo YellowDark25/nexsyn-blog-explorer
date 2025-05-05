@@ -162,6 +162,45 @@ export type Database = {
         }
         Relationships: []
       }
+      posts_blog: {
+        Row: {
+          categoria: string
+          conteudo: string
+          created_at: string | null
+          data_publicacao: string
+          id: string
+          imagem_destaque: string
+          resumo: string
+          slug: string
+          status: string
+          titulo: string
+        }
+        Insert: {
+          categoria: string
+          conteudo: string
+          created_at?: string | null
+          data_publicacao?: string
+          id?: string
+          imagem_destaque: string
+          resumo: string
+          slug: string
+          status?: string
+          titulo: string
+        }
+        Update: {
+          categoria?: string
+          conteudo?: string
+          created_at?: string | null
+          data_publicacao?: string
+          id?: string
+          imagem_destaque?: string
+          resumo?: string
+          slug?: string
+          status?: string
+          titulo?: string
+        }
+        Relationships: []
+      }
       qualificacao_leads: {
         Row: {
           agente: string | null
