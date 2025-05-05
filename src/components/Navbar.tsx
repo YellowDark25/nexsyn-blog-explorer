@@ -84,7 +84,7 @@ const Navbar = ({
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <a href="https://www.instagram.com/nexsyn.oficial/" target="_blank" rel="noopener noreferrer" className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none" aria-label="Instagram">
+                <a href="https://www.instagram.com/nexsyn.si/" target="_blank" rel="noopener noreferrer" className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none" aria-label="Instagram">
                   <Instagram className="h-5 w-5" />
                 </a>
               </NavigationMenuItem>

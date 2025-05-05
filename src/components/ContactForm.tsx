@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client'; // ajuste se o path for diferente
+import { TablesInsert } from '@/integrations/supabase/types';
+
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -27,30 +30,39 @@ const ContactForm = () => {
     setSubmitting(true);
 
     try {
-      // In a real implementation, send this data to your backend or email service
-      console.log('Form data submitted:', formData);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      const payload: TablesInsert<"contatos"> = {
+        nome: formData.nome,
+        email: formData.email,
+        telefone: formData.telefone,
+        empresa: formData.empresa,
+        mensagem: formData.mensagem,
+        data_envio: new Date().toISOString(), // opcional, pode ser default no banco
+      };
+  
+      const { error } = await supabase.from("contatos").insert(payload);
+  
+      if (error) {
+        throw error;
+      }
+  
       toast({
-        title: 'Mensagem enviada',
-        description: 'Agradecemos seu contato! Retornaremos em breve.',
+        title: "Mensagem enviada",
+        description: "Agradecemos seu contato! Retornaremos em breve.",
       });
-      
+  
       setFormData({
-        nome: '',
-        email: '',
-        telefone: '',
-        empresa: '',
-        mensagem: '',
+        nome: "",
+        email: "",
+        telefone: "",
+        empresa: "",
+        mensagem: "",
       });
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Erro ao enviar para o Supabase:", error);
       toast({
-        title: 'Erro',
-        description: 'Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.',
-        variant: 'destructive',
+        title: "Erro",
+        description: "Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.",
+        variant: "destructive",
       });
     } finally {
       setSubmitting(false);

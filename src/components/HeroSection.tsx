@@ -23,7 +23,7 @@ const HeroSection = () => {
       {/* Content */}
       <div className="container mx-auto px-6 relative z-20 text-center">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-4xl mx-auto leading-tight drop-shadow-xl font-poppins animate-fade-in">
-          Quantas vendas você perde por não conseguir atender todos os clientes?
+        Seu atendimento está abrindo portas ou perdendo clientes?
         </h1>
         <div className="mt-8 flex justify-center">
           <a 

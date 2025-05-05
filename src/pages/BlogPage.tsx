@@ -73,7 +73,9 @@ const BlogPage = () => {
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground font-poppins">
-            {getCategoryTitle()} <span className="text-primary">NEXSYN</span>
+            <img alt="Nexsyn Logo" className="h-7" src="/lovable-uploads/2413e882-78d7-43eb-8317-c8ec49076e7c.png" />
+            {getCategoryTitle()} <span className="text-primary">
+            </span>
           </h1>
           <p className="text-muted-foreground mt-2 font-sansation">
             Acompanhe as últimas notícias e artigos sobre gestão, tecnologia e inovação
