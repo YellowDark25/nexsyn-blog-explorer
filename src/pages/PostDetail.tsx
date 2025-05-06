@@ -10,6 +10,7 @@ import { getPostBySlug } from '@/services/postService';
 import { Post } from '@/types/Post';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
+import { slugToReadable } from '@/utils/formatUtils';
 
 const PostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -81,6 +82,7 @@ const PostDetail = () => {
   }
 
   const formattedDate = format(parseISO(post.data_publicacao), 'dd MMM yyyy', { locale: ptBR });
+  const formattedCategory = slugToReadable(post.categoria);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -105,7 +107,7 @@ const PostDetail = () => {
               <div className="flex items-center text-white/80 mb-3 text-sm">
                 <span>{formattedDate}</span>
                 <span className="mx-2">•</span>
-                <span>{post.categoria}</span>
+                <span>{formattedCategory}</span>
               </div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white font-poppins">
                 {post.titulo}
@@ -132,10 +134,10 @@ const PostDetail = () => {
                 <div>
                   <span className="text-sm text-muted-foreground">Categoria:</span>
                   <Link 
-                    to={`/blog/${post.categoria.toLowerCase().replace(/\s+/g, '-')}`}
+                    to={`/blog/${post.categoria}`}
                     className="ml-2 text-primary hover:underline"
                   >
-                    {post.categoria}
+                    {formattedCategory}
                   </Link>
                 </div>
                 

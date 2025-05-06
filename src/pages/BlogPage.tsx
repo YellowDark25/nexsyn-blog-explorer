@@ -1,14 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BlogSidebar from '../components/BlogSidebar';
 import ScrollToTop from '../components/ScrollToTop';
-import { getPosts } from '@/services/postService';
+import { getPosts, searchPosts } from '@/services/postService';
 import { Post } from '@/types/Post';
 import PostCard from '@/components/PostCard';
 import { useToast } from '@/hooks/use-toast';
+import { slugToReadable } from '@/utils/formatUtils';
+import { Search } from 'lucide-react';
 
 const BlogPage = () => {
   const { category } = useParams<{ category?: string }>();
@@ -17,26 +19,27 @@ const BlogPage = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const { toast } = useToast();
+  const location = useLocation();
+  const navigate = useNavigate();
   
   const postsPerPage = 6;
+  const isSearchPage = location.pathname.includes('/blog/search');
+  const searchTerm = isSearchPage ? new URLSearchParams(location.search).get('q') || '' : '';
 
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
-        let categoryName = category;
-        
-        // Convert kebab-case category from URL to Title Case for DB query
-        if (categoryName) {
-          categoryName = categoryName
-            .split('-')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
+        if (isSearchPage) {
+          const searchResults = await searchPosts(searchTerm);
+          setPosts(searchResults);
+          setHasMore(false); // Não implementamos paginação para resultados de pesquisa
+        } else {
+          // Use o slug da categoria diretamente para a filtragem
+          const data = await getPosts(postsPerPage * page, category);
+          setPosts(data);
+          setHasMore(data.length === postsPerPage * page);
         }
-        
-        const data = await getPosts(postsPerPage * page, categoryName);
-        setPosts(data);
-        setHasMore(data.length === postsPerPage * page);
       } catch (error) {
         console.error('Error fetching posts:', error);
         toast({
@@ -50,20 +53,36 @@ const BlogPage = () => {
     };
 
     fetchPosts();
-  }, [category, page, toast]);
+  }, [category, page, toast, isSearchPage, searchTerm]);
 
   const handleLoadMore = () => {
     setPage(prev => prev + 1);
   };
 
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    const searchQuery = formData.get('search-query') as string;
+    
+    if (!searchQuery?.trim()) {
+      toast({
+        title: 'Atenção',
+        description: 'Digite algo para pesquisar',
+        variant: 'default',
+      });
+      return;
+    }
+    
+    navigate(`/blog/search?q=${encodeURIComponent(searchQuery)}`);
+  };
+
   const getCategoryTitle = () => {
+    if (isSearchPage) return `Resultados para "${searchTerm}"`;
     if (!category) return "Blog";
     
-    // Convert kebab-case to Title Case
-    return category
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    // Converter slug para formato legível
+    return slugToReadable(category);
   };
 
   return (
@@ -72,14 +91,29 @@ const BlogPage = () => {
       
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground font-poppins">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground font-poppins flex items-center gap-2">
             <img alt="Nexsyn Logo" className="h-7" src="/lovable-uploads/2413e882-78d7-43eb-8317-c8ec49076e7c.png" />
-            {getCategoryTitle()} <span className="text-primary">
-            </span>
+            {getCategoryTitle()}
           </h1>
           <p className="text-muted-foreground mt-2 font-sansation">
             Acompanhe as últimas notícias e artigos sobre gestão, tecnologia e inovação
           </p>
+          
+          {/* Searchbar para desktop */}
+          <div className="hidden md:block mt-6">
+            <form onSubmit={handleSearch} className="flex max-w-md">
+              <input
+                type="text"
+                name="search-query"
+                placeholder="Buscar no blog..."
+                defaultValue={searchTerm}
+                className="flex-1 bg-muted rounded-l-md border-y border-l border-border p-2 text-foreground"
+              />
+              <button type="submit" className="bg-primary hover:bg-primary/90 text-white rounded-r-md px-4 py-2">
+                <Search className="h-5 w-5" />
+              </button>
+            </form>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -131,7 +165,10 @@ const BlogPage = () => {
             ) : (
               <div className="text-center py-16">
                 <h3 className="text-xl font-medium text-muted-foreground">
-                  Nenhum artigo encontrado {category ? `para a categoria ${getCategoryTitle()}` : ''}.
+                  {isSearchPage 
+                    ? `Nenhum artigo encontrado para "${searchTerm}".` 
+                    : `Nenhum artigo encontrado ${category ? `para a categoria ${getCategoryTitle()}` : ''}.`
+                  }
                 </h3>
               </div>
             )}

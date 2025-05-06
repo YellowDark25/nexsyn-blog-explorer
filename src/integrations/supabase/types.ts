@@ -39,7 +39,36 @@ export type Database = {
         }
         Relationships: []
       }
-      
+      contatos: {
+        Row: {
+          data_envio: string | null
+          email: string
+          empresa: string | null
+          id: string
+          mensagem: string | null
+          nome: string
+          telefone: string
+        }
+        Insert: {
+          data_envio?: string | null
+          email: string
+          empresa?: string | null
+          id?: string
+          mensagem?: string | null
+          nome: string
+          telefone: string
+        }
+        Update: {
+          data_envio?: string | null
+          email?: string
+          empresa?: string | null
+          id?: string
+          mensagem?: string | null
+          nome?: string
+          telefone?: string
+        }
+        Relationships: []
+      }
       dados_clientes: {
         Row: {
           cliente_mostrando_interesse: boolean | null
@@ -274,35 +303,6 @@ export type Database = {
         }
         Relationships: []
       }
-      contatos: {
-        Row: {
-          id: string
-          nome: string
-          email: string
-          telefone: string
-          empresa: string
-          mensagem: string
-          data_envio: string
-        }
-        Insert: {
-          nome: string
-          email: string
-          telefone: string
-          empresa: string
-          mensagem: string
-          data_envio?: string
-        }
-        Update: {
-          nome?: string
-          email?: string
-          telefone?: string
-          empresa?: string
-          mensagem?: string
-          data_envio?: string
-        }
-        Relationships: []
-      }
-      
     }
     Views: {
       [_ in never]: never

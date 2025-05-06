@@ -40,3 +40,18 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Card hover effects */
+.blog-card-hover {
+  transition: all 0.3s ease-in-out;
+  border: 1px solid transparent;
+}
+
+.blog-card-hover:hover {
+  border-color: hsl(var(--primary) / 0.5);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.blog-card-hover:hover .blog-card-image img {
+  transform: scale(1.05);
+}

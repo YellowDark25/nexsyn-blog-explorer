@@ -1,6 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { Post } from "@/types/Post";
+import { slugToReadable, readableToSlug } from "@/utils/formatUtils";
 
 /**
  * Normaliza categoria para slug seguro
@@ -8,16 +9,9 @@ import { Post } from "@/types/Post";
  */
 function normalizeCategorySlug(categoria?: string): string | undefined {
   if (!categoria) return undefined;
-
-  return categoria
-    .normalize('NFD') // separa acentos
-    .replace(/[\u0300-\u036f]/g, '') // remove acentos
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-') // espaços -> hífen
-    .replace(/[^\w\-]/g, ''); // remove símbolos
+  
+  return readableToSlug(categoria);
 }
-
 
 export async function getPosts(limit = 6, category?: string) {
   try {
@@ -25,12 +19,15 @@ export async function getPosts(limit = 6, category?: string) {
       .from('posts_blog')
       .select('*')
       .eq('status', 'publicado')
-      .order('data_publicacao', { ascending: false })
-      .limit(limit);
+      .order('data_publicacao', { ascending: false });
     
     if (category) {
-      const categoriaNormalizada = normalizeCategorySlug(category);
-      query = query.eq('categoria', categoriaNormalizada);
+      // Se a categoria for passada, procuramos por posts dessa categoria
+      query = query.eq('categoria', category);
+    }
+    
+    if (limit > 0) {
+      query = query.limit(limit);
     }
     
     const { data, error } = await query;
@@ -68,24 +65,70 @@ export async function getPostBySlug(slug: string) {
   }
 }
 
-export async function getCategories() {
+export interface CategoryWithCount {
+  slug: string;
+  name: string;
+  count: number;
+}
+
+export async function getCategories(): Promise<CategoryWithCount[]> {
   try {
+    // Obter posts publicados com suas categorias
     const { data, error } = await supabase
       .from('posts_blog')
       .select('categoria')
-      .eq('status', 'publicado')
-      .order('categoria');
+      .eq('status', 'publicado');
     
     if (error) {
       console.error('Error fetching categories:', error);
       return [];
     }
     
-    // Extract unique categories
-    const categories = [...new Set(data.map(post => post.categoria))];
-    return categories;
+    // Extrair categorias únicas e contar ocorrências
+    const categoryCounts: Record<string, number> = {};
+    data.forEach(post => {
+      const categoria = post.categoria;
+      categoryCounts[categoria] = (categoryCounts[categoria] || 0) + 1;
+    });
+    
+    // Converter para o formato necessário
+    const categories: CategoryWithCount[] = Object.entries(categoryCounts).map(
+      ([slug, count]) => ({
+        slug,
+        name: slugToReadable(slug),
+        count
+      })
+    );
+    
+    // Ordenar categorias por nome
+    return categories.sort((a, b) => a.name.localeCompare(b.name));
   } catch (error) {
     console.error('Error in getCategories:', error);
+    return [];
+  }
+}
+
+export async function searchPosts(searchTerm: string): Promise<Post[]> {
+  try {
+    if (!searchTerm || searchTerm.trim() === '') {
+      return [];
+    }
+    
+    const { data, error } = await supabase
+      .from('posts_blog')
+      .select('*')
+      .eq('status', 'publicado')
+      .or(`titulo.ilike.%${searchTerm}%,conteudo.ilike.%${searchTerm}%,resumo.ilike.%${searchTerm}%`)
+      .order('data_publicacao', { ascending: false });
+    
+    if (error) {
+      console.error('Error searching posts:', error);
+      return [];
+    }
+    
+    return data as Post[];
+  } catch (error) {
+    console.error('Error in searchPosts:', error);
     return [];
   }
 }

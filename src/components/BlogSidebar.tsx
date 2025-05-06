@@ -1,15 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
-import { getCategories } from '@/services/postService';
+import { getCategories, searchPosts, CategoryWithCount } from '@/services/postService';
 import { useToast } from '@/hooks/use-toast';
-
-interface CategoryWithCount {
-  name: string;
-  slug: string;
-  count: number;
-}
 
 interface Archive {
   id: number;
@@ -31,20 +25,13 @@ const BlogSidebar: React.FC = () => {
   const [categories, setCategories] = useState<CategoryWithCount[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await getCategories();
-        
-        // Converter categorias para o formato esperado com contagens fictícias por enquanto
-        const categoriesWithCount: CategoryWithCount[] = data.map((cat, index) => ({
-          name: cat,
-          slug: cat.toLowerCase().replace(/\s+/g, '-'),
-          count: 5 + Math.floor(Math.random() * 10) // Contagem fictícia entre 5-14
-        }));
-        
-        setCategories(categoriesWithCount);
+        const categoriesData = await getCategories();
+        setCategories(categoriesData);
       } catch (error) {
         console.error('Error fetching categories:', error);
         toast({
@@ -60,10 +47,29 @@ const BlogSidebar: React.FC = () => {
     fetchCategories();
   }, [toast]);
   
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Searching for:', searchTerm);
-    // Em uma aplicação real, isso acionaria uma pesquisa
+    
+    if (!searchTerm.trim()) {
+      toast({
+        title: 'Atenção',
+        description: 'Digite algo para pesquisar',
+        variant: 'default',
+      });
+      return;
+    }
+    
+    try {
+      // Redirecionamos para uma rota específica de pesquisa
+      navigate(`/blog/search?q=${encodeURIComponent(searchTerm)}`);
+    } catch (error) {
+      console.error('Error in search:', error);
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível realizar a pesquisa',
+        variant: 'destructive',
+      });
+    }
   };
   
   return (
@@ -74,7 +80,7 @@ const BlogSidebar: React.FC = () => {
         <form onSubmit={handleSearch} className="flex">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Pesquisar..."
             className="flex-1 bg-muted rounded-l-md border-y border-l border-border p-2 text-foreground"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
