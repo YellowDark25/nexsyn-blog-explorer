@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { Button } from './ui/button';
+
 const HeroSection = () => {
   return <section className="relative w-full bg-nexsyn-darkBlue h-[600px] flex items-center justify-center overflow-hidden">
       {/* Dark blue gradient background overlay */}
@@ -12,10 +14,13 @@ const HeroSection = () => {
     }} aria-hidden="true" />
       
       {/* Product images - positioned to the right */}
-      <div className="absolute right-0 bottom-0 z-20 hidden lg:flex items-end h-full pr-8">
-        <div className="flex items-end gap-6">
-          
-          
+      <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 hidden lg:block pr-16">
+        <div>
+          <img 
+            src="/lovable-uploads/45346a3d-16d1-4d5a-9158-3dfba5c3c19c.png" 
+            alt="PDV Legal Card Machine" 
+            className="h-80 object-contain animate-fade-in drop-shadow-2xl" 
+          />
         </div>
       </div>
       
@@ -48,4 +53,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
 export default HeroSection;

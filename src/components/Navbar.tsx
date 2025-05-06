@@ -1,17 +1,22 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-import { Instagram } from 'lucide-react';
+import { WhatsApp } from 'lucide-react';
+
+const WHATSAPP_URL = "https://api.whatsapp.com/send/?phone=556592934536&text=Eu+tenho+interesse+no+Sistema+da+NEXSYN%21&type=phone_number&app_absent=0";
+
 interface NavbarProps {
   onContactClick?: () => void;
 }
-const Navbar = ({
-  onContactClick
-}: NavbarProps) => {
+
+const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+  
   return <header className="sticky top-0 z-50 w-full bg-nexsyn-darkBlue border-b border-border/40 py-3 shadow-md">
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link to="/" className="flex items-center">
@@ -78,14 +83,25 @@ const Navbar = ({
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <button onClick={onContactClick} className={navigationMenuTriggerStyle()}>
+                <a 
+                  href={WHATSAPP_URL} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className={navigationMenuTriggerStyle()}
+                >
                   Contate-nos
-                </button>
+                </a>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <a href="https://www.instagram.com/nexsyn.si/" target="_blank" rel="noopener noreferrer" className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none" aria-label="Instagram">
-                  <Instagram className="h-5 w-5" />
+                <a 
+                  href={WHATSAPP_URL} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none" 
+                  aria-label="WhatsApp"
+                >
+                  <WhatsApp className="h-5 w-5" />
                 </a>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -132,19 +148,20 @@ const Navbar = ({
                   </a>
                 </div>
               </div>
-              <button onClick={() => {
-            onContactClick?.();
-            setMobileMenuOpen(false);
-          }} className="text-foreground hover:text-primary py-2">
-                Contate-nos
-              </button>
-              <a href="https://www.instagram.com/nexsyn.oficial/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary py-2 flex items-center gap-2">
-                <Instagram className="h-5 w-5" />
-                <span>Instagram</span>
+              <a 
+                href={WHATSAPP_URL}
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-foreground hover:text-primary py-2 flex items-center gap-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <WhatsApp className="h-5 w-5" />
+                <span>Contate-nos</span>
               </a>
             </nav>
           </div>}
       </div>
     </header>;
 };
+
 export default Navbar;
