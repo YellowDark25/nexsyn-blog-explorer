@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-import { WhatsApp } from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 
 const WHATSAPP_URL = "https://api.whatsapp.com/send/?phone=556592934536&text=Eu+tenho+interesse+no+Sistema+da+NEXSYN%21&type=phone_number&app_absent=0";
 
@@ -101,7 +101,7 @@ const Navbar = () => {
                   className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none" 
                   aria-label="WhatsApp"
                 >
-                  <WhatsApp className="h-5 w-5" />
+                  <MessageSquare className="h-5 w-5" />
                 </a>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -155,7 +155,7 @@ const Navbar = () => {
                 className="text-foreground hover:text-primary py-2 flex items-center gap-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <WhatsApp className="h-5 w-5" />
+                <MessageSquare className="h-5 w-5" />
                 <span>Contate-nos</span>
               </a>
             </nav>
