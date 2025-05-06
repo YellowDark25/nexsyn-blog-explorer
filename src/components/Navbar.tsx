@@ -1,22 +1,16 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { MessageSquare } from 'lucide-react';
-
 const WHATSAPP_URL = "https://api.whatsapp.com/send/?phone=556592934536&text=Eu+tenho+interesse+no+Sistema+da+NEXSYN%21&type=phone_number&app_absent=0";
-
 interface NavbarProps {
   onContactClick?: () => void;
 }
-
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
-  
   return <header className="sticky top-0 z-50 w-full bg-nexsyn-darkBlue border-b border-border/40 py-3 shadow-md">
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link to="/" className="flex items-center">
@@ -83,25 +77,14 @@ const Navbar = () => {
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <a 
-                  href={WHATSAPP_URL} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className={navigationMenuTriggerStyle()}
-                >
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={navigationMenuTriggerStyle()}>
                   Contate-nos
                 </a>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <a 
-                  href={WHATSAPP_URL} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none" 
-                  aria-label="WhatsApp"
-                >
-                  <MessageSquare className="h-5 w-5" />
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none" aria-label="WhatsApp">
+                  
                 </a>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -148,13 +131,7 @@ const Navbar = () => {
                   </a>
                 </div>
               </div>
-              <a 
-                href={WHATSAPP_URL}
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-foreground hover:text-primary py-2 flex items-center gap-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary py-2 flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
                 <MessageSquare className="h-5 w-5" />
                 <span>Contate-nos</span>
               </a>
@@ -163,5 +140,4 @@ const Navbar = () => {
       </div>
     </header>;
 };
-
 export default Navbar;
