@@ -14,7 +14,7 @@ const HeroSection = () => {
       {/* Product images - positioned to the right */}
       <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 hidden lg:block pr-16">
         <div>
-          <img src="/lovable-uploads/45346a3d-16d1-4d5a-9158-3dfba5c3c19c.png" alt="PDV Legal Card Machine" className="h-80 object-contain animate-fade-in drop-shadow-2xl" />
+          <img src="/lovable-uploads/934a6d72-cf72-4481-8c59-0970036520d0.png" alt="PDV Legal Card Machine" className="h-80 object-contain animate-fade-in drop-shadow-2xl" />
         </div>
       </div>
       
