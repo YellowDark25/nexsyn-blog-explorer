@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/AdminSidebar";
 import ChatMessages from "@/components/ChatMessages";
 import ChatInput from "@/components/ChatInput";
 import { useToast } from "@/hooks/use-toast";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface Message {
   id: string;
@@ -87,41 +88,82 @@ const AdminChat = () => {
     const updatedSessions = sessions.filter(s => s.id !== currentSession.id);
     setSessions([updatedCurrentSession, ...updatedSessions]);
     
-    // Simulate AI response
+    // Send the message to the n8n webhook
     setLoading(true);
     
     try {
-      // Here we would normally call an API, but for now we'll simulate a response
-      setTimeout(() => {
-        const aiResponse: Message = {
-          id: 'msg-' + Date.now(),
-          content: `Eu recebi sua mensagem: "${message}"`,
-          role: 'assistant',
-          timestamp: new Date()
-        };
-        
-        const finalSession = {
-          ...updatedCurrentSession,
-          messages: [...updatedCurrentSession.messages, aiResponse]
-        };
-        
-        setCurrentSession(finalSession);
-        
-        // Update the sessions list again
-        const finalSessions = sessions.filter(s => s.id !== updatedCurrentSession.id);
-        setSessions([finalSession, ...finalSessions]);
-        
-        setLoading(false);
-      }, 1500);
+      // Generate a session ID if needed or use the current one
+      const sessionId = currentSession.id.startsWith('session-') 
+        ? uuidv4() 
+        : currentSession.id;
+      
+      // Send the message to the n8n webhook
+      const response = await fetch('https://n8n-wh.nexsyn.com.br/webhook/set/blog', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId: sessionId,
+          message: message
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to get response from webhook');
+      }
+      
+      const data = await response.json();
+      
+      // Create a new message from the AI
+      const aiMessage: Message = {
+        id: 'msg-' + Date.now(),
+        content: data.reply || 'Não foi possível processar sua solicitação.',
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      
+      const finalSession = {
+        ...updatedCurrentSession,
+        id: sessionId, // Update with the UUID if it was generated
+        messages: [...updatedCurrentSession.messages, aiMessage]
+      };
+      
+      setCurrentSession(finalSession);
+      
+      // Update the sessions list again
+      const finalSessions = sessions.filter(s => s.id !== updatedCurrentSession.id);
+      setSessions([finalSession, ...finalSessions]);
+      
     } catch (error) {
       console.error('Error sending message:', error);
-      setLoading(false);
       
       toast({
         title: 'Erro',
-        description: 'Não foi possível enviar a mensagem',
+        description: 'Não foi possível enviar a mensagem para o webhook',
         variant: 'destructive'
       });
+      
+      // Add error message to the chat
+      const errorMessage: Message = {
+        id: 'msg-' + Date.now(),
+        content: 'Ocorreu um erro ao processar sua mensagem. Por favor, tente novamente mais tarde.',
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      
+      const finalSession = {
+        ...updatedCurrentSession,
+        messages: [...updatedCurrentSession.messages, errorMessage]
+      };
+      
+      setCurrentSession(finalSession);
+      
+      // Update the sessions list again
+      const finalSessions = sessions.filter(s => s.id !== updatedCurrentSession.id);
+      setSessions([finalSession, ...finalSessions]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -164,7 +206,8 @@ const AdminChat = () => {
       description: 'O conteúdo está sendo salvo no Supabase'
     });
     
-    // Simulate API call
+    // Here you would typically make another call to n8n to save the data to Supabase
+    // For this example, we'll just simulate the API call
     setTimeout(() => {
       setLoading(false);
       
