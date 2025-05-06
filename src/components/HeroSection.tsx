@@ -1,7 +1,5 @@
-
 import React from 'react';
 import { Button } from './ui/button';
-
 const HeroSection = () => {
   return <section className="relative w-full bg-nexsyn-darkBlue h-[600px] flex items-center justify-center overflow-hidden">
       {/* Dark blue gradient background overlay */}
@@ -16,11 +14,7 @@ const HeroSection = () => {
       {/* Product images - positioned to the right */}
       <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 hidden lg:block pr-16">
         <div>
-          <img 
-            src="/lovable-uploads/45346a3d-16d1-4d5a-9158-3dfba5c3c19c.png" 
-            alt="PDV Legal Card Machine" 
-            className="h-80 object-contain animate-fade-in drop-shadow-2xl" 
-          />
+          <img src="/lovable-uploads/45346a3d-16d1-4d5a-9158-3dfba5c3c19c.png" alt="PDV Legal Card Machine" className="h-80 object-contain animate-fade-in drop-shadow-2xl" />
         </div>
       </div>
       
@@ -29,7 +23,7 @@ const HeroSection = () => {
         <div className="max-w-2xl">
           {/* PDV Legal logo */}
           <div className="mb-6">
-            <img src="/lovable-uploads/934a6d72-cf72-4481-8c59-0970036520d0.png" alt="PDV Legal" className="h-14 object-contain" />
+            
           </div>
           
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-xl leading-tight drop-shadow-xl font-poppins animate-fade-in mb-6">
@@ -53,5 +47,4 @@ const HeroSection = () => {
       </div>
     </section>;
 };
-
 export default HeroSection;
