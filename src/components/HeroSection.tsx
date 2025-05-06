@@ -14,7 +14,7 @@ const HeroSection = () => {
       {/* Product images - positioned to the right */}
       <div className="absolute right-0 bottom-0 z-20 hidden lg:flex items-end h-full pr-8">
         <div className="flex items-end gap-6">
-          <img src="/lovable-uploads/791bbbe8-b4c7-40fb-b9d2-d18bdbc1c1c3.png" alt="PDV Dashboard" className="w-[320px] object-contain mb-12 drop-shadow-2xl" />
+          
           
         </div>
       </div>
