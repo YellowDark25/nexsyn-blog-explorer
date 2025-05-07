@@ -8,8 +8,6 @@ import Home from "./pages/Home";
 import BlogPage from "./pages/BlogPage";
 import PostDetail from "./pages/PostDetail";
 import NotFound from "./pages/NotFound";
-import AdminLogin from "./pages/AdminLogin";
-import AdminChat from "./pages/AdminChat";
 
 const queryClient = new QueryClient();
 
@@ -24,8 +22,6 @@ const App = () => (
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:category" element={<BlogPage />} />
           <Route path="/posts/:slug" element={<PostDetail />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/chat" element={<AdminChat />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

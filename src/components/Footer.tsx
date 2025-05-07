@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Youtube, Lock } from 'lucide-react';
+import { Instagram, Youtube } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -19,6 +19,15 @@ const Footer = () => {
               gestão de processos de negócios.
             </p>
             <div className="flex space-x-4 mt-4">
+              <a 
+                href="https://www.instagram.com/nexsyn.si/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-foreground hover:text-primary animate-hover"
+                aria-label="Instagram"
+              >
+                <Instagram />
+              </a>
               <a 
                 href="https://www.youtube.com/@SomosNexsyn" 
                 target="_blank" 
@@ -49,7 +58,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="https://api.whatsapp.com/send/?phone=556592934536&text=Eu+tenho+interesse+no+Sistema+da+NEXSYN%21&type=phone_number&app_absent=0" className="text-foreground hover:text-primary animate-hover">
+                <a href="#contact" className="text-foreground hover:text-primary animate-hover">
                   Contate-nos
                 </a>
               </li>
@@ -86,16 +95,8 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t border-border/40 mt-8 pt-6 flex items-center justify-between text-sm text-muted-foreground">
+        <div className="border-t border-border/40 mt-8 pt-6 text-center text-sm text-muted-foreground">
           <p>&copy; {currentYear} NEXSYN. Todos os direitos reservados.</p>
-          <Link 
-            to="/admin/login"
-            className="flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors duration-200"
-            aria-label="Área Administrativa"
-          >
-            <Lock size={14} />
-            <span className="text-xs">Admin</span>
-          </Link>
         </div>
       </div>
     </footer>
