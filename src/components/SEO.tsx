@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import GoogleAnalytics from './integrations/GoogleAnalytics';
 
 interface SEOProps {
   title?: string;
@@ -14,6 +15,9 @@ interface SEOProps {
     author?: string;
     tags?: string[];
   };
+  analytics?: {
+    googleAnalytics?: string;
+  };
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -22,7 +26,8 @@ const SEO: React.FC<SEOProps> = ({
   image = "https://lovable.dev/opengraph-image-p98pqg.png",
   url = typeof window !== 'undefined' ? window.location.href : 'https://nexsyn.com.br',
   type = "website",
-  article
+  article,
+  analytics
 }) => {
   const siteTitle = title ? `${title} | NEXSYN` : "NEXSYN Blog Explorer";
   
@@ -77,6 +82,11 @@ const SEO: React.FC<SEOProps> = ({
       <script type="application/ld+json">
         {JSON.stringify(jsonLdData)}
       </script>
+      
+      {/* Analytics Integrations */}
+      {analytics?.googleAnalytics && (
+        <GoogleAnalytics measurementId={analytics.googleAnalytics} />
+      )}
     </Helmet>
   );
 };

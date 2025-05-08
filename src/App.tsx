@@ -13,6 +13,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminChat from "./pages/admin/AdminChat";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AdminProvider } from "./contexts/AdminContext";
+import IntegrationsProvider from "./components/integrations/IntegrationsProvider";
 
 // Create a query client with improved configuration
 const queryClient = new QueryClient({
@@ -24,6 +25,9 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Analytics configuration
+const GOOGLE_ANALYTICS_ID = "G-XXXXXXXXXX"; // Replace with your actual GA ID when ready
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -60,31 +64,38 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AdminProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner closeButton position="bottom-right" />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:category" element={<BlogPage />} />
-            <Route path="/blog/search" element={<BlogPage />} />
-            <Route path="/posts/:slug" element={<PostDetail />} />
-            
-            {/* Admin Routes */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route 
-              path="/admin/chat" 
-              element={
-                <ProtectedRoute>
-                  <AdminChat />
-                </ProtectedRoute>
-              } 
-            />
-            
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </TooltipProvider>
+        <IntegrationsProvider 
+          googleAnalyticsId={GOOGLE_ANALYTICS_ID}
+          // Add other integration IDs as needed:
+          // facebookPixelId="123456789"
+          // hotjarId="123456"
+        >
+          <TooltipProvider>
+            <Toaster />
+            <Sonner closeButton position="bottom-right" />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:category" element={<BlogPage />} />
+              <Route path="/blog/search" element={<BlogPage />} />
+              <Route path="/posts/:slug" element={<PostDetail />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route 
+                path="/admin/chat" 
+                element={
+                  <ProtectedRoute>
+                    <AdminChat />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </TooltipProvider>
+        </IntegrationsProvider>
       </AdminProvider>
     </QueryClientProvider>
   );
