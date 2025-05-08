@@ -26,6 +26,21 @@ const SEO: React.FC<SEOProps> = ({
 }) => {
   const siteTitle = title ? `${title} | NEXSYN` : "NEXSYN Blog Explorer";
   
+  // Create a sanitized JSON string for LD+JSON that doesn't contain any Symbol values
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": type === 'article' ? 'Article' : 'WebSite',
+    "headline": title,
+    "description": description,
+    "image": [image],
+    "url": url,
+    ...(type === 'article' && article ? {
+      "datePublished": article.publishedTime,
+      ...(article.modifiedTime ? { "dateModified": article.modifiedTime } : {}),
+      ...(article.author ? { "author": { "@type": "Person", "name": article.author } } : {})
+    } : {})
+  };
+  
   return (
     <Helmet>
       {/* Basic Meta Tags */}
@@ -58,23 +73,9 @@ const SEO: React.FC<SEOProps> = ({
         </>
       )}
       
-      {/* Schema.org LD+JSON */}
+      {/* Schema.org LD+JSON - Using JSON.stringify instead of template literals */}
       <script type="application/ld+json">
-        {`
-          {
-            "@context": "https://schema.org",
-            "@type": "${type === 'article' ? 'Article' : 'WebSite'}",
-            "headline": "${title}",
-            "description": "${description}",
-            "image": ["${image}"],
-            "url": "${url}"
-            ${type === 'article' && article ? `
-            ,"datePublished": "${article.publishedTime}"
-            ${article.modifiedTime ? `,"dateModified": "${article.modifiedTime}"` : ''}
-            ${article.author ? `,"author": {"@type": "Person", "name": "${article.author}"}` : ''}
-            ` : ''}
-          }
-        `}
+        {JSON.stringify(jsonLdData)}
       </script>
     </Helmet>
   );
