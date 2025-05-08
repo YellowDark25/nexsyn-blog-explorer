@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -10,6 +11,7 @@ import { getPosts } from '@/services/postService';
 import { Post } from '@/types/Post';
 import { Separator } from '@/components/ui/separator';
 import SEO from '@/components/SEO';
+import { slugToReadable } from '@/utils/formatUtils';
 
 const BlogPage: React.FC = () => {
   const { category } = useParams<{ category: string }>();
@@ -63,11 +65,8 @@ const BlogPage: React.FC = () => {
   const getPageTitle = () => {
     if (searchQuery) return `Busca: ${searchQuery}`;
     if (category) {
-      // Convert kebab-case to Title Case
-      return category
-        .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
+      // Use the slugToReadable utility function
+      return slugToReadable(category);
     }
     return 'Blog';
   };
@@ -79,7 +78,7 @@ const BlogPage: React.FC = () => {
         description={searchQuery 
           ? `Resultados da busca para "${searchQuery}" no Blog NEXSYN` 
           : category 
-            ? `Artigos sobre ${category.split('-').join(' ')} no Blog NEXSYN`
+            ? `Artigos sobre ${slugToReadable(category)} no Blog NEXSYN`
             : "Explore nossos artigos sobre gestão, tecnologia e inovação no Blog NEXSYN"
         }
       />
@@ -138,8 +137,9 @@ const BlogPage: React.FC = () => {
                 {hasMore && (
                   <div className="mt-10 text-center">
                     <LoadMoreButton 
-                      onClick={handleLoadMore} 
+                      onLoadMore={handleLoadMore} 
                       loading={isLoading && page > 1}
+                      hasMore={hasMore}
                     />
                   </div>
                 )}
