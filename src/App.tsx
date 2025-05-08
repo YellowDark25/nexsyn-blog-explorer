@@ -9,6 +9,10 @@ import Home from "./pages/Home";
 import BlogPage from "./pages/BlogPage";
 import PostDetail from "./pages/PostDetail";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminChat from "./pages/admin/AdminChat";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AdminProvider } from "./contexts/AdminContext";
 
 // Create a query client with improved configuration
 const queryClient = new QueryClient({
@@ -55,21 +59,35 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner closeButton position="bottom-right" />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:category" element={<BlogPage />} />
-            <Route path="/blog/search" element={<BlogPage />} />
-            <Route path="/posts/:slug" element={<PostDetail />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <AdminProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner closeButton position="bottom-right" />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:category" element={<BlogPage />} />
+              <Route path="/blog/search" element={<BlogPage />} />
+              <Route path="/posts/:slug" element={<PostDetail />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route 
+                path="/admin/chat" 
+                element={
+                  <ProtectedRoute>
+                    <AdminChat />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AdminProvider>
     </QueryClientProvider>
   );
 };

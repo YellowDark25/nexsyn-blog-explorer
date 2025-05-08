@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Youtube, ArrowUp } from 'lucide-react';
+import { Instagram, Youtube, ArrowUp, Lock } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -121,9 +121,19 @@ const Footer = () => {
         
         {/* Scroll to top button and copyright */}
         <div className="border-t border-border/40 mt-10 pt-8 flex flex-col md:flex-row items-center justify-between">
-          <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-            &copy; {currentYear} NEXSYN. Todos os direitos reservados.
-          </p>
+          <div className="flex items-center gap-8">
+            <p className="text-sm text-muted-foreground mb-4 md:mb-0">
+              &copy; {currentYear} NEXSYN. Todos os direitos reservados.
+            </p>
+            <Link 
+              to="/admin/login" 
+              className="text-sm text-muted-foreground/70 hover:text-primary flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-all"
+              aria-label="Área administrativa"
+            >
+              <Lock className="h-3 w-3" />
+              <span>Admin</span>
+            </Link>
+          </div>
           
           <button 
             onClick={scrollToTop}
