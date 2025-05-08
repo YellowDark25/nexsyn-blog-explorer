@@ -73,15 +73,15 @@ const PostDetail = () => {
   return (
     <>
       <SEO 
-        title={post.title}
-        description={post.excerpt}
-        image={post.coverImage}
+        title={post.titulo}
+        description={post.resumo}
+        image={post.imagem_destaque}
         type="article"
         article={{
-          publishedTime: post.publishedAt,
-          modifiedTime: post.updatedAt,
-          author: post.author.name,
-          tags: post.categories.map(cat => cat.name)
+          publishedTime: post.data_publicacao,
+          modifiedTime: post.data_publicacao, // Assuming no separate updated date
+          author: "NEXSYN", // Using default author
+          tags: [post.categoria] // Using the category as a tag
         }}
       />
       <Navbar />
@@ -97,63 +97,55 @@ const PostDetail = () => {
               Voltar ao blog
             </Link>
             
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{post.title}</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{post.titulo}</h1>
             
             <div className="flex items-center text-sm text-muted-foreground mb-6">
-              <span>{formatDate(post.publishedAt)}</span>
+              <span>{formatDate(post.data_publicacao)}</span>
               <span className="mx-2">•</span>
-              <span>{post.readingTime} min de leitura</span>
-              {post.categories.length > 0 && (
-                <>
-                  <span className="mx-2">•</span>
-                  <span>
-                    {post.categories.map((category, index) => (
-                      <span key={category.id}>
-                        <Link 
-                          to={`/blog/${category.slug}`} 
-                          className="hover:text-primary hover:underline"
-                        >
-                          {category.name}
-                        </Link>
-                        {index < post.categories.length - 1 ? ', ' : ''}
-                      </span>
-                    ))}
-                  </span>
-                </>
-              )}
+              <span>5 min de leitura</span> {/* Default reading time */}
+              <span className="mx-2">•</span>
+              <span>
+                <Link 
+                  to={`/blog/${post.categoria}`} 
+                  className="hover:text-primary hover:underline"
+                >
+                  {post.categoria}
+                </Link>
+              </span>
             </div>
             
             <div className="mb-8">
               <img 
-                src={post.coverImage} 
-                alt={post.title}
+                src={post.imagem_destaque} 
+                alt={post.titulo}
                 className="w-full h-auto rounded-lg object-cover"
                 style={{ maxHeight: "500px" }}
               />
             </div>
             
             <div className="prose prose-lg max-w-none"
-                 dangerouslySetInnerHTML={{ __html: post.content }}
+                 dangerouslySetInnerHTML={{ __html: post.conteudo }}
             />
             
             <div className="flex items-center mt-8 pt-6 border-t border-border">
               <div className="mr-4">
                 <img 
-                  src={post.author.avatar} 
-                  alt={post.author.name}
+                  src="/lovable-uploads/2413e882-78d7-43eb-8317-c8ec49076e7c.png" 
+                  alt="NEXSYN"
                   className="h-12 w-12 rounded-full object-cover"
                 />
               </div>
               <div>
-                <p className="font-medium">{post.author.name}</p>
-                <p className="text-sm text-muted-foreground">{post.author.role}</p>
+                <p className="font-medium">NEXSYN</p>
+                <p className="text-sm text-muted-foreground">Equipe NEXSYN</p>
               </div>
             </div>
           </div>
           
           <RelatedPostsSidebar 
-            currentPostId={post.id}
-            categories={post.categories.map(c => c.id)}
+            category={post.categoria}
+            currentPostSlug={post.slug}
+            relatedPosts={[]} // We'll update this later
           />
         </div>
       </main>
