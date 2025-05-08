@@ -21,8 +21,8 @@ const RecentPosts: React.FC<RecentPostsProps> = ({ category, limit = 6 }) => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
-        const data = await getPosts(limit, category);
-        setPosts(data);
+        const result = await getPosts(1, limit, category);
+        setPosts(result.posts);
       } catch (error) {
         console.error('Error fetching posts:', error);
         toast({
