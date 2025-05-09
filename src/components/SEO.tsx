@@ -31,7 +31,7 @@ const SEO: React.FC<SEOProps> = ({
 }) => {
   const siteTitle = title ? `${title} | NEXSYN` : "NEXSYN Blog Explorer";
   
-  // Certifique-se de que as tags são strings válidas
+  // Ensure all tags are valid strings
   let safeTags: string[] = [];
   if (article?.tags && Array.isArray(article.tags)) {
     safeTags = article.tags
@@ -39,7 +39,7 @@ const SEO: React.FC<SEOProps> = ({
       .map(tag => String(tag));
   }
 
-  // Sanitize all potential data to ensure no Symbol values exist
+  // Sanitize all article data to ensure no Symbol values exist
   const safeArticle = article ? {
     publishedTime: article.publishedTime ? String(article.publishedTime) : undefined,
     modifiedTime: article.modifiedTime ? String(article.modifiedTime) : undefined,
@@ -47,17 +47,17 @@ const SEO: React.FC<SEOProps> = ({
     tags: safeTags
   } : undefined;
   
-  // Crie um objeto sanitizado para LD+JSON que não contém valores Symbol
+  // Create a sanitized object for LD+JSON that doesn't contain Symbol values
   const jsonLdData: Record<string, any> = {
     "@context": "https://schema.org",
     "@type": type === 'article' ? 'Article' : 'WebSite',
-    "headline": title,
-    "description": description,
-    "image": [image],
-    "url": url
+    "headline": String(title),
+    "description": String(description),
+    "image": [String(image)],
+    "url": String(url)
   };
   
-  // Adicione propriedades de artigo apenas se elas existirem e não forem símbolos
+  // Add article properties only if they exist and are not symbols
   if (type === 'article' && safeArticle) {
     if (safeArticle.publishedTime) {
       jsonLdData.datePublished = safeArticle.publishedTime;
@@ -77,21 +77,21 @@ const SEO: React.FC<SEOProps> = ({
     <Helmet>
       {/* Basic Meta Tags */}
       <title>{siteTitle}</title>
-      <meta name="description" content={description} />
+      <meta name="description" content={String(description)} />
       
       {/* Open Graph / Facebook */}
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={url} />
-      <meta property="og:title" content={siteTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
+      <meta property="og:type" content={String(type)} />
+      <meta property="og:url" content={String(url)} />
+      <meta property="og:title" content={String(siteTitle)} />
+      <meta property="og:description" content={String(description)} />
+      <meta property="og:image" content={String(image)} />
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@nexsyn" />
-      <meta name="twitter:title" content={siteTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:title" content={String(siteTitle)} />
+      <meta name="twitter:description" content={String(description)} />
+      <meta name="twitter:image" content={String(image)} />
       
       {/* Article Specific Schema (if applicable) */}
       {safeArticle && (
@@ -105,14 +105,14 @@ const SEO: React.FC<SEOProps> = ({
         </>
       )}
       
-      {/* Schema.org LD+JSON - Com conversão segura para JSON */}
+      {/* Schema.org LD+JSON - Using safe JSON conversion */}
       <script type="application/ld+json">
         {JSON.stringify(jsonLdData)}
       </script>
       
       {/* Analytics Integrations */}
       {analytics?.googleAnalytics && (
-        <GoogleAnalytics measurementId={analytics.googleAnalytics} />
+        <GoogleAnalytics measurementId={String(analytics.googleAnalytics)} />
       )}
     </Helmet>
   );

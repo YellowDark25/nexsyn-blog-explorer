@@ -82,7 +82,7 @@ const PostDetail = () => {
     );
   }
 
-  // Certifique-se de que as tags sejam strings simples e não contêm Symbols
+  // Ensure that tags are simple strings and don't contain Symbols
   const simpleTags = post?.categoria ? [String(post.categoria)] : [];
 
   return (
