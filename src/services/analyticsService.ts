@@ -1,59 +1,80 @@
 
 /**
- * Analytics Service for tracking page views and events
+ * Analytics Service
+ * Handles tracking and analytics functionality
  */
 
-// Define event types for better type checking
-export type AnalyticsEventType = 
-  | 'page_view' 
-  | 'click' 
-  | 'form_submission' 
-  | 'post_view' 
-  | 'search' 
-  | 'contact';
-
-// Interface for event data
 export interface AnalyticsEvent {
-  type: AnalyticsEventType;
+  type: string;
+  label: string;
   category?: string;
-  label?: string;
   value?: number;
   metadata?: Record<string, any>;
 }
 
 /**
- * Tracks a page view in analytics integrations
- * @param path Page path
- * @param title Page title
+ * Track a page view
  */
 export const trackPageView = (path: string, title: string) => {
   // Track in Google Analytics if available
-  if (typeof window !== 'undefined' && 'gtag' in window) {
-    // @ts-ignore - gtag is added by the analytics script
-    window.gtag('config', window.GOOGLE_ANALYTICS_ID, {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', 'page_view', {
       page_path: path,
       page_title: title,
+      page_location: window.location.href
     });
   }
-
-  console.log('📊 Page view tracked:', { path, title });
+  
+  console.log('Page view tracked:', { path, title });
 };
 
 /**
- * Tracks a custom event in analytics integrations
- * @param event Event details
+ * Track an event
  */
 export const trackEvent = (event: AnalyticsEvent) => {
-  // Track in Google Analytics if available
-  if (typeof window !== 'undefined' && 'gtag' in window) {
-    // @ts-ignore - gtag is added by the analytics script
+  // Google Analytics
+  if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', event.type, {
-      event_category: event.category,
+      event_category: event.category || 'engagement',
       event_label: event.label,
       value: event.value,
-      ...event.metadata,
+      ...event.metadata
     });
   }
+  
+  // Log for debugging
+  console.log('Event tracked:', event);
+};
 
-  console.log('📊 Event tracked:', event);
+/**
+ * Track user engagement with social features
+ */
+export const trackSocialEngagement = (
+  action: 'like' | 'share' | 'comment' | 'bookmark', 
+  contentId: string, 
+  metadata?: Record<string, any>
+) => {
+  const event: AnalyticsEvent = {
+    type: 'social_engagement',
+    label: action,
+    category: 'social',
+    metadata: {
+      contentId,
+      ...metadata
+    }
+  };
+  
+  trackEvent(event);
+};
+
+/**
+ * Track post view - used specifically for blog post views
+ */
+export const trackPostView = (postId: string, postTitle: string) => {
+  trackEvent({
+    type: 'post_view',
+    label: postTitle,
+    category: 'content',
+    metadata: { postId }
+  });
 };

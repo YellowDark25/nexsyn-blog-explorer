@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -10,11 +11,15 @@ import { formatDate } from '@/utils/formatUtils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronLeft } from 'lucide-react';
 import SEO from '@/components/SEO';
+import SocialShareButtons from '@/components/SocialShareButtons';
+import CommentSection from '@/components/CommentSection';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 const PostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const analytics = useAnalytics();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -24,6 +29,11 @@ const PostDetail = () => {
           const postData = await getPostBySlug(slug);
           setPost(postData);
           setIsLoading(false);
+          
+          // Track post view
+          if (postData) {
+            analytics.trackPostView(postData.id, postData.titulo);
+          }
         } catch (error) {
           console.error("Error fetching post:", error);
           setIsLoading(false);
@@ -33,7 +43,10 @@ const PostDetail = () => {
 
     fetchPost();
     window.scrollTo(0, 0);
-  }, [slug]);
+  }, [slug, analytics]);
+
+  // Get current URL for sharing
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
 
   if (isLoading) {
     return (
@@ -122,10 +135,27 @@ const PostDetail = () => {
                 style={{ maxHeight: "500px" }}
               />
             </div>
+
+            {/* Social Share Buttons - Positioned below featured image */}
+            <SocialShareButtons 
+              title={post.titulo} 
+              url={currentUrl} 
+              postId={post.id} 
+            />
             
             <div className="prose prose-lg max-w-none"
                  dangerouslySetInnerHTML={{ __html: post.conteudo }}
             />
+            
+            {/* Second instance of Social Share Buttons - Positioned below content */}
+            <div className="my-8 pt-6 border-t border-border">
+              <h3 className="text-lg font-semibold mb-4">Compartilhe este artigo</h3>
+              <SocialShareButtons 
+                title={post.titulo} 
+                url={currentUrl} 
+                postId={post.id} 
+              />
+            </div>
             
             <div className="flex items-center mt-8 pt-6 border-t border-border">
               <div className="mr-4">
@@ -140,6 +170,9 @@ const PostDetail = () => {
                 <p className="text-sm text-muted-foreground">Equipe NEXSYN</p>
               </div>
             </div>
+
+            {/* Comment Section */}
+            <CommentSection postId={post.id} />
           </div>
           
           <RelatedPostsSidebar 
