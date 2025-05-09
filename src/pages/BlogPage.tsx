@@ -65,22 +65,26 @@ const BlogPage: React.FC = () => {
   const getPageTitle = () => {
     if (searchQuery) return `Busca: ${searchQuery}`;
     if (category) {
-      // Use the slugToReadable utility function
       return slugToReadable(category);
     }
     return 'Blog';
+  };
+
+  // Generate SEO description based on context
+  const getSeoDescription = () => {
+    if (searchQuery) {
+      return `Resultados da busca para "${searchQuery}" no Blog NEXSYN`;
+    } else if (category) {
+      return `Artigos sobre ${slugToReadable(category)} no Blog NEXSYN`;
+    }
+    return "Explore nossos artigos sobre gestão, tecnologia e inovação no Blog NEXSYN";
   };
 
   return (
     <>
       <SEO 
         title={getPageTitle()}
-        description={searchQuery 
-          ? `Resultados da busca para "${searchQuery}" no Blog NEXSYN` 
-          : category 
-            ? `Artigos sobre ${slugToReadable(category)} no Blog NEXSYN`
-            : "Explore nossos artigos sobre gestão, tecnologia e inovação no Blog NEXSYN"
-        }
+        description={getSeoDescription()}
       />
     
       <Navbar />

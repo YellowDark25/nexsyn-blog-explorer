@@ -12,13 +12,15 @@ import { useAnalytics } from '@/hooks/use-analytics';
 const Home = () => {
   const analytics = useAnalytics();
   
+  const safeGoogleAnalyticsId = "G-XXXXXXXXXX"; // Replace with your actual GA ID when ready
+  
   return (
     <>
       <SEO 
         title="Home" 
         description="NEXSYN - Soluções inovadoras em gestão empresarial e tecnologia da informação" 
         analytics={{
-          googleAnalytics: "G-XXXXXXXXXX" // Replace with your actual GA ID when ready
+          googleAnalytics: safeGoogleAnalyticsId
         }}
       />
       <Navbar />

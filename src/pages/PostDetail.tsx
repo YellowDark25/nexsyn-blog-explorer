@@ -82,22 +82,22 @@ const PostDetail = () => {
     );
   }
 
-  // Ensure that tags are simple strings and don't contain Symbols
-  const simpleTags = post?.categoria ? [String(post.categoria)] : [];
+  // Create a safe tags array with simple string values
+  const safeTags = post?.categoria ? [String(post.categoria)] : [];
 
   return (
     <>
       {post && (
         <SEO 
-          title={String(post.titulo)}
-          description={String(post.resumo)}
-          image={String(post.imagem_destaque)}
+          title={post.titulo}
+          description={post.resumo}
+          image={post.imagem_destaque}
           type="article"
           article={{
-            publishedTime: String(post.data_publicacao),
-            modifiedTime: String(post.data_publicacao),
+            publishedTime: post.data_publicacao,
+            modifiedTime: post.data_publicacao,
             author: "NEXSYN",
-            tags: simpleTags
+            tags: safeTags
           }}
         />
       )}

@@ -29,90 +29,117 @@ const SEO: React.FC<SEOProps> = ({
   article,
   analytics
 }) => {
-  const siteTitle = title ? `${title} | NEXSYN` : "NEXSYN Blog Explorer";
+  // Ensure all inputs are strings
+  const safeTitle = String(title || "");
+  const safeDescription = String(description || "");
+  const safeImage = String(image || "");
+  const safeUrl = String(url || "");
+  const safeType = String(type || "website");
+  const siteTitle = safeTitle ? `${safeTitle} | NEXSYN` : "NEXSYN Blog Explorer";
   
-  // Ensure all tags are valid strings
-  let safeTags: string[] = [];
-  if (article?.tags && Array.isArray(article.tags)) {
-    safeTags = article.tags
-      .filter(tag => typeof tag === 'string')
-      .map(tag => String(tag));
-  }
+  // Process article data safely
+  const safeArticle = React.useMemo(() => {
+    if (!article) return null;
+    
+    // Create safe tags array
+    const safeTags: string[] = [];
+    if (article.tags && Array.isArray(article.tags)) {
+      for (const tag of article.tags) {
+        if (tag) safeTags.push(String(tag));
+      }
+    }
+    
+    return {
+      publishedTime: article.publishedTime ? String(article.publishedTime) : "",
+      modifiedTime: article.modifiedTime ? String(article.modifiedTime) : "",
+      author: article.author ? String(article.author) : "",
+      tags: safeTags
+    };
+  }, [article]);
+  
+  // Create JSON-LD data object
+  const jsonLdData = React.useMemo(() => {
+    const data: Record<string, any> = {
+      "@context": "https://schema.org",
+      "@type": safeType === 'article' ? 'Article' : 'WebSite',
+      "headline": safeTitle,
+      "description": safeDescription,
+      "image": [safeImage],
+      "url": safeUrl
+    };
+    
+    if (safeType === 'article' && safeArticle) {
+      if (safeArticle.publishedTime) {
+        data.datePublished = safeArticle.publishedTime;
+      }
+      
+      if (safeArticle.modifiedTime) {
+        data.dateModified = safeArticle.modifiedTime;
+      }
+      
+      if (safeArticle.author) {
+        data.author = { "@type": "Person", "name": safeArticle.author };
+      }
+      
+      if (safeArticle.tags.length > 0) {
+        data.keywords = safeArticle.tags.join(',');
+      }
+    }
+    
+    return data;
+  }, [safeTitle, safeDescription, safeImage, safeUrl, safeType, safeArticle]);
 
-  // Sanitize all article data to ensure no Symbol values exist
-  const safeArticle = article ? {
-    publishedTime: article.publishedTime ? String(article.publishedTime) : undefined,
-    modifiedTime: article.modifiedTime ? String(article.modifiedTime) : undefined,
-    author: article.author ? String(article.author) : undefined,
-    tags: safeTags
-  } : undefined;
+  // Convert JSON-LD to string safely
+  const jsonLdString = React.useMemo(() => {
+    try {
+      return JSON.stringify(jsonLdData);
+    } catch (error) {
+      console.error("Error stringifying JSON-LD data:", error);
+      return "{}";
+    }
+  }, [jsonLdData]);
   
-  // Create a sanitized object for LD+JSON that doesn't contain Symbol values
-  const jsonLdData: Record<string, any> = {
-    "@context": "https://schema.org",
-    "@type": type === 'article' ? 'Article' : 'WebSite',
-    "headline": String(title),
-    "description": String(description),
-    "image": [String(image)],
-    "url": String(url)
-  };
-  
-  // Add article properties only if they exist and are not symbols
-  if (type === 'article' && safeArticle) {
-    if (safeArticle.publishedTime) {
-      jsonLdData.datePublished = safeArticle.publishedTime;
-    }
-    if (safeArticle.modifiedTime) {
-      jsonLdData.dateModified = safeArticle.modifiedTime;
-    }
-    if (safeArticle.author) {
-      jsonLdData.author = { "@type": "Person", "name": safeArticle.author };
-    }
-    if (safeTags.length > 0) {
-      jsonLdData.keywords = safeTags.join(',');
-    }
-  }
+  // Process analytics ID safely
+  const safeGoogleAnalyticsId = analytics?.googleAnalytics ? String(analytics.googleAnalytics) : "";
   
   return (
     <Helmet>
       {/* Basic Meta Tags */}
       <title>{siteTitle}</title>
-      <meta name="description" content={String(description)} />
+      <meta name="description" content={safeDescription} />
       
       {/* Open Graph / Facebook */}
-      <meta property="og:type" content={String(type)} />
-      <meta property="og:url" content={String(url)} />
-      <meta property="og:title" content={String(siteTitle)} />
-      <meta property="og:description" content={String(description)} />
-      <meta property="og:image" content={String(image)} />
+      <meta property="og:type" content={safeType} />
+      <meta property="og:url" content={safeUrl} />
+      <meta property="og:title" content={siteTitle} />
+      <meta property="og:description" content={safeDescription} />
+      <meta property="og:image" content={safeImage} />
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@nexsyn" />
-      <meta name="twitter:title" content={String(siteTitle)} />
-      <meta name="twitter:description" content={String(description)} />
-      <meta name="twitter:image" content={String(image)} />
+      <meta name="twitter:title" content={siteTitle} />
+      <meta name="twitter:description" content={safeDescription} />
+      <meta name="twitter:image" content={safeImage} />
       
-      {/* Article Specific Schema (if applicable) */}
+      {/* Article Specific Schema */}
       {safeArticle && (
         <>
           {safeArticle.publishedTime && <meta property="article:published_time" content={safeArticle.publishedTime} />}
           {safeArticle.modifiedTime && <meta property="article:modified_time" content={safeArticle.modifiedTime} />}
           {safeArticle.author && <meta property="article:author" content={safeArticle.author} />}
-          {safeTags.map((tag, index) => (
+          {safeArticle.tags.map((tag, index) => (
             <meta key={`tag-${index}`} property="article:tag" content={tag} />
           ))}
         </>
       )}
       
-      {/* Schema.org LD+JSON - Using safe JSON conversion */}
-      <script type="application/ld+json">
-        {JSON.stringify(jsonLdData)}
-      </script>
+      {/* Schema.org LD+JSON */}
+      <script type="application/ld+json">{jsonLdString}</script>
       
-      {/* Analytics Integrations */}
-      {analytics?.googleAnalytics && (
-        <GoogleAnalytics measurementId={String(analytics.googleAnalytics)} />
+      {/* Analytics Integration */}
+      {safeGoogleAnalyticsId && (
+        <GoogleAnalytics measurementId={safeGoogleAnalyticsId} />
       )}
     </Helmet>
   );
