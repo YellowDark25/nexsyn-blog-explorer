@@ -31,8 +31,16 @@ const SEO: React.FC<SEOProps> = ({
 }) => {
   const siteTitle = title ? `${title} | NEXSYN` : "NEXSYN Blog Explorer";
   
-  // Create a sanitized object for LD+JSON that won't contain any Symbol values
-  const jsonLdData = {
+  // Certifique-se de que as tags são strings válidas
+  let safeTags: string[] = [];
+  if (article?.tags && Array.isArray(article.tags)) {
+    safeTags = article.tags
+      .filter(tag => typeof tag === 'string')
+      .map(tag => String(tag));
+  }
+
+  // Crie um objeto sanitizado para LD+JSON que não contém valores Symbol
+  const jsonLdData: Record<string, any> = {
     "@context": "https://schema.org",
     "@type": type === 'article' ? 'Article' : 'WebSite',
     "headline": title,
@@ -41,16 +49,19 @@ const SEO: React.FC<SEOProps> = ({
     "url": url
   };
   
-  // Only add article properties if they exist and are not symbols
+  // Adicione propriedades de artigo apenas se elas existirem e não forem símbolos
   if (type === 'article' && article) {
     if (article.publishedTime) {
-      jsonLdData["datePublished"] = article.publishedTime;
+      jsonLdData.datePublished = String(article.publishedTime);
     }
     if (article.modifiedTime) {
-      jsonLdData["dateModified"] = article.modifiedTime;
+      jsonLdData.dateModified = String(article.modifiedTime);
     }
     if (article.author) {
-      jsonLdData["author"] = { "@type": "Person", "name": article.author };
+      jsonLdData.author = { "@type": "Person", "name": String(article.author) };
+    }
+    if (safeTags.length > 0) {
+      jsonLdData.keywords = safeTags.join(',');
     }
   }
   
@@ -77,16 +88,16 @@ const SEO: React.FC<SEOProps> = ({
       {/* Article Specific Schema (if applicable) */}
       {article && (
         <>
-          <meta property="article:published_time" content={article.publishedTime} />
-          {article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
-          {article.author && <meta property="article:author" content={article.author} />}
-          {article.tags && article.tags.map((tag, index) => (
+          {article.publishedTime && <meta property="article:published_time" content={String(article.publishedTime)} />}
+          {article.modifiedTime && <meta property="article:modified_time" content={String(article.modifiedTime)} />}
+          {article.author && <meta property="article:author" content={String(article.author)} />}
+          {safeTags.map((tag, index) => (
             <meta key={`tag-${index}`} property="article:tag" content={tag} />
           ))}
         </>
       )}
       
-      {/* Schema.org LD+JSON - Manually stringifying with care */}
+      {/* Schema.org LD+JSON - Com conversão segura para JSON */}
       <script type="application/ld+json">
         {JSON.stringify(jsonLdData)}
       </script>

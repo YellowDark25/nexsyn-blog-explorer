@@ -82,7 +82,7 @@ const PostDetail = () => {
     );
   }
 
-  // Simplify tags to ensure they are just strings
+  // Certifique-se de que as tags sejam strings simples
   const simpleTags = post?.categoria ? [post.categoria] : [];
 
   return (
@@ -99,6 +99,7 @@ const PostDetail = () => {
           tags: simpleTags
         }}
       />
+      
       <Navbar />
       
       <main className="container mx-auto px-4 py-8 md:py-12 lg:max-w-7xl">
