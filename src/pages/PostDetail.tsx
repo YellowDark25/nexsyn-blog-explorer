@@ -82,23 +82,25 @@ const PostDetail = () => {
     );
   }
 
-  // Certifique-se de que as tags sejam strings simples
-  const simpleTags = post?.categoria ? [post.categoria] : [];
+  // Certifique-se de que as tags sejam strings simples e não contêm Symbols
+  const simpleTags = post?.categoria ? [String(post.categoria)] : [];
 
   return (
     <>
-      <SEO 
-        title={post?.titulo}
-        description={post?.resumo}
-        image={post?.imagem_destaque}
-        type="article"
-        article={{
-          publishedTime: post?.data_publicacao,
-          modifiedTime: post?.data_publicacao,
-          author: "NEXSYN",
-          tags: simpleTags
-        }}
-      />
+      {post && (
+        <SEO 
+          title={String(post.titulo)}
+          description={String(post.resumo)}
+          image={String(post.imagem_destaque)}
+          type="article"
+          article={{
+            publishedTime: String(post.data_publicacao),
+            modifiedTime: String(post.data_publicacao),
+            author: "NEXSYN",
+            tags: simpleTags
+          }}
+        />
+      )}
       
       <Navbar />
       

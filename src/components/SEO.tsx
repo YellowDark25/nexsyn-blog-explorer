@@ -39,6 +39,14 @@ const SEO: React.FC<SEOProps> = ({
       .map(tag => String(tag));
   }
 
+  // Sanitize all potential data to ensure no Symbol values exist
+  const safeArticle = article ? {
+    publishedTime: article.publishedTime ? String(article.publishedTime) : undefined,
+    modifiedTime: article.modifiedTime ? String(article.modifiedTime) : undefined,
+    author: article.author ? String(article.author) : undefined,
+    tags: safeTags
+  } : undefined;
+  
   // Crie um objeto sanitizado para LD+JSON que não contém valores Symbol
   const jsonLdData: Record<string, any> = {
     "@context": "https://schema.org",
@@ -50,15 +58,15 @@ const SEO: React.FC<SEOProps> = ({
   };
   
   // Adicione propriedades de artigo apenas se elas existirem e não forem símbolos
-  if (type === 'article' && article) {
-    if (article.publishedTime) {
-      jsonLdData.datePublished = String(article.publishedTime);
+  if (type === 'article' && safeArticle) {
+    if (safeArticle.publishedTime) {
+      jsonLdData.datePublished = safeArticle.publishedTime;
     }
-    if (article.modifiedTime) {
-      jsonLdData.dateModified = String(article.modifiedTime);
+    if (safeArticle.modifiedTime) {
+      jsonLdData.dateModified = safeArticle.modifiedTime;
     }
-    if (article.author) {
-      jsonLdData.author = { "@type": "Person", "name": String(article.author) };
+    if (safeArticle.author) {
+      jsonLdData.author = { "@type": "Person", "name": safeArticle.author };
     }
     if (safeTags.length > 0) {
       jsonLdData.keywords = safeTags.join(',');
@@ -86,11 +94,11 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="twitter:image" content={image} />
       
       {/* Article Specific Schema (if applicable) */}
-      {article && (
+      {safeArticle && (
         <>
-          {article.publishedTime && <meta property="article:published_time" content={String(article.publishedTime)} />}
-          {article.modifiedTime && <meta property="article:modified_time" content={String(article.modifiedTime)} />}
-          {article.author && <meta property="article:author" content={String(article.author)} />}
+          {safeArticle.publishedTime && <meta property="article:published_time" content={safeArticle.publishedTime} />}
+          {safeArticle.modifiedTime && <meta property="article:modified_time" content={safeArticle.modifiedTime} />}
+          {safeArticle.author && <meta property="article:author" content={safeArticle.author} />}
           {safeTags.map((tag, index) => (
             <meta key={`tag-${index}`} property="article:tag" content={tag} />
           ))}
