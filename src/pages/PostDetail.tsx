@@ -82,20 +82,20 @@ const PostDetail = () => {
     );
   }
 
-  // Create a safe tags array with simple string values
+  // Create a safe tags array with simple string values - ensure no Symbol values get passed
   const safeTags = post?.categoria ? [String(post.categoria)] : [];
 
   return (
     <>
       {post && (
         <SEO 
-          title={post.titulo}
-          description={post.resumo}
-          image={post.imagem_destaque}
+          title={String(post.titulo)}
+          description={String(post.resumo)}
+          image={String(post.imagem_destaque)}
           type="article"
           article={{
-            publishedTime: post.data_publicacao,
-            modifiedTime: post.data_publicacao,
+            publishedTime: String(post.data_publicacao),
+            modifiedTime: String(post.data_publicacao),
             author: "NEXSYN",
             tags: safeTags
           }}

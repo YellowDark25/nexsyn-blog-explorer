@@ -20,7 +20,7 @@ const Home = () => {
         title="Home" 
         description="NEXSYN - Soluções inovadoras em gestão empresarial e tecnologia da informação" 
         analytics={{
-          googleAnalytics: safeGoogleAnalyticsId
+          googleAnalytics: String(safeGoogleAnalyticsId)
         }}
       />
       <Navbar />

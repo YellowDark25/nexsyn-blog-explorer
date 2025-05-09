@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -83,8 +82,8 @@ const BlogPage: React.FC = () => {
   return (
     <>
       <SEO 
-        title={getPageTitle()}
-        description={getSeoDescription()}
+        title={String(getPageTitle())}
+        description={String(getSeoDescription())}
       />
     
       <Navbar />
