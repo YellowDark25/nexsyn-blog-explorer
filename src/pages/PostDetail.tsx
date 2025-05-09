@@ -6,7 +6,6 @@ import Footer from '@/components/Footer';
 import RelatedPostsSidebar from '@/components/RelatedPostsSidebar';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
-import SocialShareButtons from '@/components/SocialShareButtons';
 import CommentSection from '@/components/CommentSection';
 import PostHeader from '@/components/post/PostHeader';
 import PostImage from '@/components/post/PostImage';
@@ -14,6 +13,7 @@ import PostContent from '@/components/post/PostContent';
 import PostAuthor from '@/components/post/PostAuthor';
 import PostSkeleton from '@/components/post/PostSkeleton';
 import PostNotFound from '@/components/post/PostNotFound';
+import ShareSection from '@/components/share/ShareSection';
 import { usePost } from '@/hooks/use-post';
 
 const PostDetail = () => {
@@ -57,8 +57,8 @@ const PostDetail = () => {
             <PostHeader post={post} />
             <PostImage src={post.imagem_destaque} alt={post.titulo} />
             
-            {/* Social Share Buttons - Positioned below featured image */}
-            <SocialShareButtons 
+            {/* First instance of ShareSection - Positioned below featured image */}
+            <ShareSection 
               title={post.titulo} 
               url={currentUrl} 
               postId={post.id} 
@@ -66,15 +66,13 @@ const PostDetail = () => {
             
             <PostContent content={post.conteudo} />
             
-            {/* Second instance of Social Share Buttons - Positioned below content */}
-            <div className="my-8 pt-6 border-t border-border">
-              <h3 className="text-lg font-semibold mb-4">Compartilhe este artigo</h3>
-              <SocialShareButtons 
-                title={post.titulo} 
-                url={currentUrl} 
-                postId={post.id} 
-              />
-            </div>
+            {/* Second instance of ShareSection - Positioned below content with heading */}
+            <ShareSection 
+              title={post.titulo} 
+              url={currentUrl} 
+              postId={post.id}
+              showHeading={true}
+            />
             
             <PostAuthor />
 
