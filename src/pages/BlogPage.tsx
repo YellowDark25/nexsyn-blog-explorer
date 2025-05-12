@@ -1,64 +1,83 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BlogSidebar from '@/components/BlogSidebar';
 import PostCard from '@/components/PostCard';
-import LoadMoreButton from '@/components/LoadMoreButton';
 import ScrollToTop from '@/components/ScrollToTop';
 import { getPosts } from '@/services/postService';
 import { Post } from '@/types/Post';
 import { Separator } from '@/components/ui/separator';
 import SEO from '@/components/SEO';
 import { slugToReadable } from '@/utils/formatUtils';
+import PaginationControls from '@/components/PaginationControls';
+import { trackEvent } from '@/services/analyticsService';
+
+const POSTS_PER_PAGE = 6;
 
 const BlogPage: React.FC = () => {
   const { category } = useParams<{ category: string }>();
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('q');
+  const pageParam = searchParams.get('page');
+  const navigate = useNavigate();
   
   const [posts, setPosts] = useState<Post[]>([]);
-  const [page, setPage] = useState<number>(1);
-  const [hasMore, setHasMore] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [totalPosts, setTotalPosts] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(
+    pageParam ? parseInt(pageParam, 10) : 1
+  );
   
-  const postsPerPage = 9;
+  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
   
   useEffect(() => {
     // Reset state when search or category changes
-    setPosts([]);
-    setPage(1);
-    setHasMore(true);
     setIsLoading(true);
     
-    loadPosts(1, category, searchQuery || undefined);
-  }, [category, searchQuery]);
+    // Update page number from URL if it exists
+    const pageFromUrl = pageParam ? parseInt(pageParam, 10) : 1;
+    setCurrentPage(pageFromUrl);
+    
+    loadPosts(pageFromUrl, category, searchQuery || undefined);
+  }, [category, searchQuery, pageParam]);
   
-  const loadPosts = async (pageNumber: number, categorySlug?: string, search?: string) => {
+  const loadPosts = async (page: number, categorySlug?: string, search?: string) => {
     try {
-      const { posts: newPosts, total } = await getPosts(pageNumber, postsPerPage, categorySlug, search);
+      setIsLoading(true);
+      const { posts: newPosts, total } = await getPosts(page, POSTS_PER_PAGE, categorySlug, search);
       
-      if (pageNumber === 1) {
-        setPosts(newPosts);
-      } else {
-        setPosts(prevPosts => [...prevPosts, ...newPosts]);
-      }
-      
+      setPosts(newPosts);
       setTotalPosts(total);
-      setHasMore(pageNumber * postsPerPage < total);
       setIsLoading(false);
+      
+      // Track page view in analytics
+      trackEvent({
+        type: 'page_view',
+        category: 'blog',
+        label: `Blog Page ${page}`,
+        metadata: {
+          category: categorySlug,
+          search: search,
+          page: page
+        }
+      });
     } catch (error) {
       console.error('Error fetching posts:', error);
       setIsLoading(false);
     }
   };
   
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    loadPosts(nextPage, category, searchQuery || undefined);
+  const handlePageChange = (page: number) => {
+    const searchParamsObj = new URLSearchParams(searchParams.toString());
+    searchParamsObj.set('page', page.toString());
+    
+    // Update URL with new page number
+    navigate({
+      pathname: location.pathname,
+      search: searchParamsObj.toString()
+    });
   };
   
   // Generate page title based on context
@@ -111,10 +130,10 @@ const BlogPage: React.FC = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">
-            {isLoading && page === 1 ? (
+            {isLoading ? (
               // Loading state
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[...Array(6)].map((_, index) => (
+                {[...Array(POSTS_PER_PAGE)].map((_, index) => (
                   <div 
                     key={index} 
                     className="border border-border rounded-lg p-4 h-80 animate-pulse"
@@ -134,12 +153,12 @@ const BlogPage: React.FC = () => {
                   ))}
                 </div>
                 
-                {hasMore && (
-                  <div className="mt-10 text-center">
-                    <LoadMoreButton 
-                      onLoadMore={handleLoadMore} 
-                      loading={isLoading && page > 1}
-                      hasMore={hasMore}
+                {totalPages > 1 && (
+                  <div className="mt-10 flex justify-center">
+                    <PaginationControls
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
                     />
                   </div>
                 )}
