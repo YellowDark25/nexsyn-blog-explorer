@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,8 +9,6 @@ import BlogPage from "./pages/BlogPage";
 import PostDetail from "./pages/PostDetail";
 import NotFound from "./pages/NotFound";
 import Sitemap from "./pages/Sitemap";
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminChat from "./pages/admin/AdminChat";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AdminProvider } from "./contexts/AdminContext";
 import IntegrationsProvider from "./components/integrations/IntegrationsProvider";

@@ -4,6 +4,14 @@ import { Post } from '@/types/Post';
 
 const BASE_URL = 'https://nexsyn.com.br';
 
+// Define interface for URLs with lastmod
+interface SitemapUrl {
+  url: string;
+  priority: number;
+  changefreq: string;
+  lastmod?: string; // Make lastmod optional
+}
+
 /**
  * Gera o conteúdo XML do sitemap dinâmicamente
  */
@@ -14,20 +22,20 @@ export async function generateSitemap(): Promise<string> {
     const categories = await getCategories();
     
     // Base URLs that are always included
-    const staticUrls = [
+    const staticUrls: SitemapUrl[] = [
       { url: '/', priority: 1.0, changefreq: 'weekly' },
       { url: '/blog', priority: 0.8, changefreq: 'daily' },
     ];
     
     // Add category URLs
-    const categoryUrls = categories.map(category => ({
+    const categoryUrls: SitemapUrl[] = categories.map(category => ({
       url: `/blog/${category.slug}`,
       priority: 0.7,
       changefreq: 'weekly',
     }));
     
     // Add post URLs
-    const postUrls = posts.map(post => ({
+    const postUrls: SitemapUrl[] = posts.map(post => ({
       url: `/posts/${post.slug}`,
       priority: 0.6,
       changefreq: 'monthly',
@@ -35,7 +43,7 @@ export async function generateSitemap(): Promise<string> {
     }));
     
     // Combine all URLs
-    const allUrls = [...staticUrls, ...categoryUrls, ...postUrls];
+    const allUrls: SitemapUrl[] = [...staticUrls, ...categoryUrls, ...postUrls];
     
     // XML Header
     let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
