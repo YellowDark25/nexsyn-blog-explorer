@@ -4,16 +4,21 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import Home from "./pages/Home";
 import BlogPage from "./pages/BlogPage";
 import PostDetail from "./pages/PostDetail";
 import NotFound from "./pages/NotFound";
+import Sitemap from "./pages/Sitemap";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminChat from "./pages/admin/AdminChat";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AdminProvider } from "./contexts/AdminContext";
 import IntegrationsProvider from "./components/integrations/IntegrationsProvider";
+
+// Melhorar a performance com carregamento lazy dos componentes menos usados
+const AdminChat = lazy(() => import("./pages/admin/AdminChat"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 
 // Create a query client with improved configuration
 const queryClient = new QueryClient({
@@ -79,15 +84,25 @@ const App = () => {
               <Route path="/blog/:category" element={<BlogPage />} />
               <Route path="/blog/search" element={<BlogPage />} />
               <Route path="/posts/:slug" element={<PostDetail />} />
+              <Route path="/sitemap.xml" element={<Sitemap />} />
               
               {/* Admin Routes */}
-              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route 
+                path="/admin/login" 
+                element={
+                  <Suspense fallback={<div className="loading">Carregando...</div>}>
+                    <AdminLogin />
+                  </Suspense>
+                } 
+              />
               <Route 
                 path="/admin/chat" 
                 element={
-                  <ProtectedRoute>
-                    <AdminChat />
-                  </ProtectedRoute>
+                  <Suspense fallback={<div className="loading">Carregando...</div>}>
+                    <ProtectedRoute>
+                      <AdminChat />
+                    </ProtectedRoute>
+                  </Suspense>
                 } 
               />
               

@@ -18,6 +18,9 @@ interface SEOProps {
   analytics?: {
     googleAnalytics?: string;
   };
+  structuredData?: Record<string, any>;
+  canonical?: string;
+  noindex?: boolean;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -27,12 +30,15 @@ const SEO: React.FC<SEOProps> = ({
   url = typeof window !== 'undefined' ? window.location.href : 'https://nexsyn.com.br',
   type = "website",
   article,
-  analytics
+  analytics,
+  structuredData,
+  canonical,
+  noindex = false,
 }) => {
   const siteTitle = title ? `${title} | NEXSYN` : "NEXSYN Blog Explorer";
   
   // Create a sanitized JSON string for LD+JSON that doesn't contain any Symbol values
-  const jsonLdData = {
+  const jsonLdData = structuredData || {
     "@context": "https://schema.org",
     "@type": type === 'article' ? 'Article' : 'WebSite',
     "headline": title,
@@ -51,6 +57,17 @@ const SEO: React.FC<SEOProps> = ({
       {/* Basic Meta Tags */}
       <title>{siteTitle}</title>
       <meta name="description" content={description} />
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      
+      {/* Canonical Link */}
+      {canonical && <link rel="canonical" href={canonical} />}
+      
+      {/* Robots Control */}
+      {noindex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow" />
+      )}
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -58,6 +75,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:title" content={siteTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
+      <meta property="og:site_name" content="NEXSYN" />
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -82,6 +100,11 @@ const SEO: React.FC<SEOProps> = ({
       <script type="application/ld+json">
         {JSON.stringify(jsonLdData)}
       </script>
+      
+      {/* Preconnect to important domains for performance */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://images.pexels.com" />
       
       {/* Analytics Integrations */}
       {analytics?.googleAnalytics && (

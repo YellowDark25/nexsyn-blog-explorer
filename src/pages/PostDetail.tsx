@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -5,16 +6,21 @@ import Footer from '@/components/Footer';
 import RelatedPostsSidebar from '@/components/RelatedPostsSidebar';
 import ScrollToTop from '@/components/ScrollToTop';
 import { getPostBySlug } from '@/services/postService';
+import { generateArticleSchema } from '@/services/sitemapService'; 
 import { Post } from '@/types/Post';
 import { formatDate } from '@/utils/formatUtils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronLeft } from 'lucide-react';
+import OptimizedImage from '@/components/OptimizedImage';
 import SEO from '@/components/SEO';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 const PostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [readingTime, setReadingTime] = useState<number>(5); // Default 5 min
+  const analytics = useAnalytics();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -22,7 +28,22 @@ const PostDetail = () => {
         setIsLoading(true);
         try {
           const postData = await getPostBySlug(slug);
-          setPost(postData);
+          
+          if (postData) {
+            setPost(postData);
+            
+            // Calculate reading time based on content length
+            if (postData.conteudo) {
+              // Average reading speed: 200 words per minute
+              const wordCount = postData.conteudo.split(/\s+/).length;
+              const calculatedTime = Math.ceil(wordCount / 200);
+              setReadingTime(calculatedTime > 0 ? calculatedTime : 1);
+            }
+            
+            // Track page view for analytics
+            analytics.trackPostView(postData.id, postData.titulo);
+          }
+          
           setIsLoading(false);
         } catch (error) {
           console.error("Error fetching post:", error);
@@ -33,7 +54,7 @@ const PostDetail = () => {
 
     fetchPost();
     window.scrollTo(0, 0);
-  }, [slug]);
+  }, [slug, analytics]);
 
   if (isLoading) {
     return (
@@ -70,6 +91,9 @@ const PostDetail = () => {
     );
   }
 
+  // Generate structured data for this article
+  const articleSchema = generateArticleSchema(post);
+  
   return (
     <>
       <SEO 
@@ -79,10 +103,11 @@ const PostDetail = () => {
         type="article"
         article={{
           publishedTime: post.data_publicacao,
-          modifiedTime: post.data_publicacao, // Assuming no separate updated date
-          author: "NEXSYN", // Using default author
-          tags: [post.categoria] // Using the category as a tag
+          modifiedTime: post.data_publicacao,
+          author: "NEXSYN",
+          tags: [post.categoria]
         }}
+        structuredData={articleSchema}
       />
       <Navbar />
       
@@ -102,7 +127,7 @@ const PostDetail = () => {
             <div className="flex items-center text-sm text-muted-foreground mb-6">
               <span>{formatDate(post.data_publicacao)}</span>
               <span className="mx-2">•</span>
-              <span>5 min de leitura</span> {/* Default reading time */}
+              <span>{readingTime} min de leitura</span>
               <span className="mx-2">•</span>
               <span>
                 <Link 
@@ -115,10 +140,11 @@ const PostDetail = () => {
             </div>
             
             <div className="mb-8">
-              <img 
+              <OptimizedImage 
                 src={post.imagem_destaque} 
                 alt={post.titulo}
                 className="w-full h-auto rounded-lg object-cover"
+                placeholderClassName="h-[300px] md:h-[400px] lg:h-[500px]"
                 style={{ maxHeight: "500px" }}
               />
             </div>
