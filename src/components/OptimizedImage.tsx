@@ -22,34 +22,37 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>('');
   
-  // Usamos essa ref para manter o estado correto durante a transição
-  const isCurrentSource = React.useRef<string>(src);
+  // Usamos cache para evitar recarregamento de imagens já vistas
+  const cachedImages = React.useRef<Set<string>>(new Set());
   
   useEffect(() => {
-    // Reset state when src changes and track current source
-    if (isCurrentSource.current !== src) {
-      setIsLoaded(false);
-      isCurrentSource.current = src;
+    // Se a imagem já estiver em cache, considere-a carregada
+    if (cachedImages.current.has(src)) {
+      setImgSrc(src);
+      setIsLoaded(true);
+      return;
     }
+    
+    // Para novas imagens, resetamos o estado
+    setIsLoaded(false);
     
     const img = new Image();
     img.src = src;
     
     img.onload = () => {
-      // Verificamos se ainda é a mesma fonte antes de atualizar o estado
-      if (isCurrentSource.current === src) {
-        setImgSrc(src);
+      // Adiciona ao cache
+      cachedImages.current.add(src);
+      setImgSrc(src);
+      // Pequeno delay para garantir transição suave
+      setTimeout(() => {
         setIsLoaded(true);
-      }
+      }, 50);
     };
     
     img.onerror = () => {
       console.error(`Error loading image: ${src}`);
-      // Verificamos se ainda é a mesma fonte antes de atualizar o estado
-      if (isCurrentSource.current === src) {
-        setImgSrc('/placeholder.svg');
-        setIsLoaded(true);
-      }
+      setImgSrc('/placeholder.svg');
+      setIsLoaded(true);
     };
     
     // Start loading the image
@@ -72,7 +75,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           )}
           style={{ 
             width: props.width ? `${props.width}px` : '100%',
-            height: props.height ? `${props.height}px` : '300px',
+            height: props.height ? `${props.height}px` : 'auto',
             opacity: isLoaded ? 0 : 1
           }}
         />
@@ -86,14 +89,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           "transition-opacity duration-300",
           isLoaded ? "opacity-100" : "opacity-0"
         )}
-        onLoad={() => {
-          // Pequeno delay para garantir transição suave
-          setTimeout(() => {
-            if (isCurrentSource.current === src) {
-              setIsLoaded(true);
-            }
-          }, 50);
-        }}
         {...props}
       />
     </>

@@ -26,7 +26,7 @@ const PostDetail = () => {
     const fetchPost = async () => {
       if (slug) {
         try {
-          // Não alteramos o estado de loading imediatamente para evitar o piscar
+          setIsLoading(true);
           const postData = await getPostBySlug(slug);
           
           if (postData) {
@@ -44,11 +44,8 @@ const PostDetail = () => {
             analytics.trackPostView(postData.id, postData.titulo);
           }
           
-          // Definimos um pequeno delay antes de desativar o carregamento
-          // para garantir que todos os dados estejam prontos
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 100);
+          // Set loading to false after data is ready
+          setIsLoading(false);
         } catch (error) {
           console.error("Error fetching post:", error);
           setIsLoading(false);
@@ -56,16 +53,10 @@ const PostDetail = () => {
       }
     };
 
+    // Reset scroll position when navigating to a new post
+    window.scrollTo(0, 0);
     fetchPost();
-    // Não resetamos o scroll aqui, deixando para quando o conteúdo estiver pronto
   }, [slug, analytics]);
-
-  // Efeito para controlar o scroll depois que o conteúdo for carregado
-  useEffect(() => {
-    if (!isLoading && post) {
-      window.scrollTo(0, 0);
-    }
-  }, [isLoading, post]);
 
   // Se ainda estiver carregando, mostramos o esqueleto
   if (isLoading) {
