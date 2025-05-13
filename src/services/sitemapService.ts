@@ -75,14 +75,15 @@ export async function generateSitemap(): Promise<string> {
  * Gera dados estruturados do tipo Article para schema.org
  */
 export function generateArticleSchema(post: Post) {
+  // Ensure we're creating a plain object without any symbol values
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    'headline': post.titulo,
-    'description': post.resumo,
-    'image': post.imagem_destaque,
-    'datePublished': post.data_publicacao,
-    'dateModified': post.data_publicacao,
+    'headline': post.titulo || '',
+    'description': post.resumo || '',
+    'image': post.imagem_destaque || '',
+    'datePublished': post.data_publicacao || '',
+    'dateModified': post.data_publicacao || '',
     'author': {
       '@type': 'Organization',
       'name': 'NEXSYN',

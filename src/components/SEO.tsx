@@ -37,42 +37,61 @@ const SEO: React.FC<SEOProps> = ({
 }) => {
   const siteTitle = title ? `${title} | NEXSYN` : "NEXSYN Blog Explorer";
   
-  // Create a sanitized JSON data object for LD+JSON
-  const jsonLdData = structuredData || {
+  // Create a base structured data object
+  const baseData = {
     "@context": "https://schema.org",
     "@type": type === 'article' ? 'Article' : 'WebSite',
     "headline": title,
     "description": description,
     "image": [image],
-    "url": url,
-    ...(type === 'article' && article ? {
-      "datePublished": article.publishedTime,
-      ...(article.modifiedTime ? { "dateModified": article.modifiedTime } : {}),
-      ...(article.author ? { "author": { "@type": "Person", "name": article.author } } : {})
-    } : {})
+    "url": url
   };
+  
+  // Add article-specific fields if applicable
+  if (type === 'article' && article) {
+    if (article.publishedTime) baseData.datePublished = article.publishedTime;
+    if (article.modifiedTime) baseData.dateModified = article.modifiedTime;
+    if (article.author) baseData.author = { "@type": "Person", "name": article.author };
+  }
+  
+  // Merge with custom structured data if provided
+  const jsonLdData = structuredData || baseData;
 
-  // Function to sanitize the JSON data and remove any Symbol values
+  // Function to deeply sanitize the JSON data and remove any non-serializable values
   const sanitizeJson = (obj: any): any => {
-    // Return simple types directly
-    if (obj === null || obj === undefined || typeof obj !== 'object') {
+    if (obj === null || obj === undefined) {
+      return null;
+    }
+    
+    // Handle primitive types directly
+    if (typeof obj !== 'object' && typeof obj !== 'function' && typeof obj !== 'symbol') {
       return obj;
+    }
+    
+    if (typeof obj === 'function' || typeof obj === 'symbol') {
+      return null; // Replace functions and symbols with null
     }
     
     // Handle arrays
     if (Array.isArray(obj)) {
-      return obj.map(item => sanitizeJson(item));
+      return obj
+        .map(item => sanitizeJson(item))
+        .filter(item => item !== null && item !== undefined);
     }
     
     // Handle objects
     const sanitized: Record<string, any> = {};
-    Object.keys(obj).forEach(key => {
+    for (const key of Object.keys(obj)) {
       const value = obj[key];
-      // Skip Symbol values
-      if (typeof value !== 'symbol') {
+      if (
+        value !== undefined && 
+        value !== null &&
+        typeof value !== 'function' &&
+        typeof value !== 'symbol'
+      ) {
         sanitized[key] = sanitizeJson(value);
       }
-    });
+    }
     
     return sanitized;
   };
@@ -81,11 +100,13 @@ const SEO: React.FC<SEOProps> = ({
   const sanitizedJsonLd = sanitizeJson(jsonLdData);
 
   // Create a stringified version safely
-  let jsonLdString;
+  let jsonLdString = '{}';
   try {
     jsonLdString = JSON.stringify(sanitizedJsonLd);
+    // Double-check that it's valid
+    JSON.parse(jsonLdString); 
   } catch (error) {
-    console.error('Error stringifying structured data:', error);
+    console.error('Error processing structured data:', error);
     jsonLdString = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "WebSite",
@@ -93,7 +114,7 @@ const SEO: React.FC<SEOProps> = ({
       "url": "https://nexsyn.com.br"
     });
   }
-  
+
   return (
     <Helmet>
       {/* Basic Meta Tags */}
@@ -127,16 +148,18 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="twitter:image" content={image} />
       
       {/* Article Specific Schema (if applicable) */}
-      {article && (
-        <>
-          {article.publishedTime && <meta property="article:published_time" content={article.publishedTime} />}
-          {article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
-          {article.author && <meta property="article:author" content={article.author} />}
-          {article.tags && article.tags.map((tag, index) => (
-            <meta key={`tag-${index}`} property="article:tag" content={tag} />
-          ))}
-        </>
+      {article && article.publishedTime && (
+        <meta property="article:published_time" content={article.publishedTime} />
       )}
+      {article && article.modifiedTime && (
+        <meta property="article:modified_time" content={article.modifiedTime} />
+      )}
+      {article && article.author && (
+        <meta property="article:author" content={article.author} />
+      )}
+      {article && article.tags && article.tags.map((tag, index) => (
+        <meta key={`tag-${index}`} property="article:tag" content={tag} />
+      ))}
       
       {/* Schema.org LD+JSON - Using pre-sanitized and safely stringified JSON */}
       <script type="application/ld+json">{jsonLdString}</script>
