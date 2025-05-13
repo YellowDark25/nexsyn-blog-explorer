@@ -37,7 +37,7 @@ const SEO: React.FC<SEOProps> = ({
 }) => {
   const siteTitle = title ? `${title} | NEXSYN` : "NEXSYN Blog Explorer";
   
-  // Create a sanitized JSON string for LD+JSON that doesn't contain any Symbol values
+  // Create a sanitized JSON data object for LD+JSON
   const jsonLdData = structuredData || {
     "@context": "https://schema.org",
     "@type": type === 'article' ? 'Article' : 'WebSite',
@@ -51,6 +51,48 @@ const SEO: React.FC<SEOProps> = ({
       ...(article.author ? { "author": { "@type": "Person", "name": article.author } } : {})
     } : {})
   };
+
+  // Function to sanitize the JSON data and remove any Symbol values
+  const sanitizeJson = (obj: any): any => {
+    // Return simple types directly
+    if (obj === null || obj === undefined || typeof obj !== 'object') {
+      return obj;
+    }
+    
+    // Handle arrays
+    if (Array.isArray(obj)) {
+      return obj.map(item => sanitizeJson(item));
+    }
+    
+    // Handle objects
+    const sanitized: Record<string, any> = {};
+    Object.keys(obj).forEach(key => {
+      const value = obj[key];
+      // Skip Symbol values
+      if (typeof value !== 'symbol') {
+        sanitized[key] = sanitizeJson(value);
+      }
+    });
+    
+    return sanitized;
+  };
+  
+  // Sanitize the JSON data
+  const sanitizedJsonLd = sanitizeJson(jsonLdData);
+
+  // Create a stringified version safely
+  let jsonLdString;
+  try {
+    jsonLdString = JSON.stringify(sanitizedJsonLd);
+  } catch (error) {
+    console.error('Error stringifying structured data:', error);
+    jsonLdString = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NEXSYN",
+      "url": "https://nexsyn.com.br"
+    });
+  }
   
   return (
     <Helmet>
@@ -87,7 +129,7 @@ const SEO: React.FC<SEOProps> = ({
       {/* Article Specific Schema (if applicable) */}
       {article && (
         <>
-          <meta property="article:published_time" content={article.publishedTime} />
+          {article.publishedTime && <meta property="article:published_time" content={article.publishedTime} />}
           {article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
           {article.author && <meta property="article:author" content={article.author} />}
           {article.tags && article.tags.map((tag, index) => (
@@ -96,10 +138,8 @@ const SEO: React.FC<SEOProps> = ({
         </>
       )}
       
-      {/* Schema.org LD+JSON - Using JSON.stringify instead of template literals */}
-      <script type="application/ld+json">
-        {JSON.stringify(jsonLdData)}
-      </script>
+      {/* Schema.org LD+JSON - Using pre-sanitized and safely stringified JSON */}
+      <script type="application/ld+json">{jsonLdString}</script>
       
       {/* Preconnect to important domains for performance */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
