@@ -12,6 +12,34 @@ interface SitemapUrl {
   lastmod?: string; // Make lastmod optional
 }
 
+// Define the ArticleSchema interface to ensure type safety
+interface ArticleSchema {
+  '@context': string;
+  '@type': string;
+  headline: string;
+  description: string;
+  image: string;
+  datePublished: string;
+  dateModified: string;
+  author: {
+    '@type': string;
+    name: string;
+    url: string;
+  };
+  publisher: {
+    '@type': string;
+    name: string;
+    logo: {
+      '@type': string;
+      url: string;
+    };
+  };
+  mainEntityOfPage: {
+    '@type': string;
+    '@id': string;
+  };
+}
+
 /**
  * Gera o conteúdo XML do sitemap dinâmicamente
  */
@@ -74,9 +102,9 @@ export async function generateSitemap(): Promise<string> {
 /**
  * Gera dados estruturados do tipo Article para schema.org
  */
-export function generateArticleSchema(post: Post) {
-  // Ensure we're creating a plain object without any symbol values
-  const articleSchema = {
+export function generateArticleSchema(post: Post): ArticleSchema {
+  // Create a properly typed article schema object
+  const articleSchema: ArticleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     'headline': post.titulo || '',

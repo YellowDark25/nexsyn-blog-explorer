@@ -23,6 +23,30 @@ interface SEOProps {
   noindex?: boolean;
 }
 
+// Define a proper type for the structured data
+interface StructuredData {
+  "@context": string;
+  "@type": string;
+  headline: string;
+  description: string;
+  image: string[];
+  url: string;
+  datePublished?: string;
+  dateModified?: string;
+  author?: {
+    "@type": string;
+    name: string;
+  };
+  publisher?: {
+    "@type": string;
+    name: string;
+    logo?: {
+      "@type": string;
+      url: string;
+    };
+  };
+}
+
 const SEO: React.FC<SEOProps> = ({
   title = "NEXSYN Blog Explorer",
   description = "Blog NEXSYN - Acompanhe as últimas notícias e artigos sobre gestão, tecnologia e inovação",
@@ -37,8 +61,8 @@ const SEO: React.FC<SEOProps> = ({
 }) => {
   const siteTitle = title ? `${title} | NEXSYN` : "NEXSYN Blog Explorer";
   
-  // Create a base structured data object
-  const baseData = {
+  // Create a base structured data object with the proper type
+  const baseData: StructuredData = {
     "@context": "https://schema.org",
     "@type": type === 'article' ? 'Article' : 'WebSite',
     "headline": title,
@@ -51,7 +75,12 @@ const SEO: React.FC<SEOProps> = ({
   if (type === 'article' && article) {
     if (article.publishedTime) baseData.datePublished = article.publishedTime;
     if (article.modifiedTime) baseData.dateModified = article.modifiedTime;
-    if (article.author) baseData.author = { "@type": "Person", "name": article.author };
+    if (article.author) {
+      baseData.author = { 
+        "@type": "Person", 
+        "name": article.author 
+      };
+    }
   }
   
   // Merge with custom structured data if provided
