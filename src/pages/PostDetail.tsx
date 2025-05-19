@@ -1,158 +1,161 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import RelatedPostsSidebar from '@/components/RelatedPostsSidebar';
-import ScrollToTop from '@/components/ScrollToTop';
+
+import React, { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { ArrowLeft } from 'lucide-react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import { getPostBySlug } from '@/services/postService';
 import { Post } from '@/types/Post';
-import { formatDate } from '@/utils/formatUtils';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ChevronLeft } from 'lucide-react';
-import SEO from '@/components/SEO';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { slugToReadable } from '@/utils/formatUtils';
 
 const PostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
-      if (slug) {
-        setIsLoading(true);
-        try {
-          const postData = await getPostBySlug(slug);
-          setPost(postData);
-          setIsLoading(false);
-        } catch (error) {
-          console.error("Error fetching post:", error);
-          setIsLoading(false);
+      setLoading(true);
+      try {
+        if (!slug) {
+          navigate('/blog');
+          return;
         }
+
+        const postData = await getPostBySlug(slug);
+        
+        if (!postData) {
+          toast({
+            title: 'Erro',
+            description: 'Artigo não encontrado.',
+            variant: 'destructive',
+          });
+          navigate('/blog');
+          return;
+        }
+        
+        setPost(postData);
+      } catch (error) {
+        console.error('Error fetching post:', error);
+        toast({
+          title: 'Erro',
+          description: 'Não foi possível carregar o artigo. Por favor, tente novamente mais tarde.',
+          variant: 'destructive',
+        });
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchPost();
-    window.scrollTo(0, 0);
-  }, [slug]);
+  }, [slug, toast, navigate]);
 
-  if (isLoading) {
+  if (loading) {
     return (
-      <>
+      <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
-        <div className="container mx-auto px-4 py-8">
-          <Skeleton className="h-8 w-2/3 mb-4" />
-          <Skeleton className="h-6 w-1/3 mb-8" />
-          <Skeleton className="h-64 w-full mb-8" />
-          <div className="flex flex-col space-y-4">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-5/6" />
+        <main className="flex-grow container mx-auto px-4 py-8">
+          <div className="animate-pulse">
+            <div className="h-8 bg-muted rounded w-3/4 max-w-2xl mb-4"></div>
+            <div className="h-4 bg-muted rounded w-40 mb-8"></div>
+            <div className="h-64 bg-muted rounded w-full mb-6"></div>
+            <div className="space-y-3">
+              <div className="h-4 bg-muted rounded w-full"></div>
+              <div className="h-4 bg-muted rounded w-full"></div>
+              <div className="h-4 bg-muted rounded w-3/4"></div>
+            </div>
           </div>
-        </div>
+        </main>
         <Footer />
-      </>
+      </div>
     );
   }
 
   if (!post) {
-    return (
-      <>
-        <Navbar />
-        <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-3xl font-bold mb-4">Post não encontrado</h1>
-          <p className="mb-8">O artigo que você está procurando não existe ou foi removido.</p>
-          <Link to="/blog" className="text-primary hover:underline">
-            Voltar para o blog
-          </Link>
-        </div>
-        <Footer />
-      </>
-    );
+    return null;
   }
 
+  const formattedDate = format(parseISO(post.data_publicacao), 'dd MMM yyyy', { locale: ptBR });
+  const formattedCategory = slugToReadable(post.categoria);
+
   return (
-    <>
-      <SEO 
-        title={post.titulo}
-        description={post.resumo}
-        image={post.imagem_destaque}
-        type="article"
-        article={{
-          publishedTime: post.data_publicacao,
-          modifiedTime: post.data_publicacao, // Assuming no separate updated date
-          author: "NEXSYN", // Using default author
-          tags: [post.categoria] // Using the category as a tag
-        }}
-      />
+    <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
       
-      <main className="container mx-auto px-4 py-8 md:py-12 lg:max-w-7xl">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-2/3">
-            <Link 
-              to="/blog" 
-              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4"
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Voltar ao blog
+      <main className="flex-grow">
+        {/* Post Header */}
+        <div className="relative h-[300px] md:h-[400px] w-full bg-nexsyn-darkBlue overflow-hidden">
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50 z-10"
+            aria-hidden="true"
+          />
+          
+          <img 
+            src={post.imagem_destaque} 
+            alt={post.titulo}
+            className="absolute inset-0 w-full h-full object-cover z-0"
+          />
+          
+          <div className="container mx-auto px-4 h-full flex items-center relative z-20">
+            <div className="max-w-3xl">
+              <div className="flex items-center text-white/80 mb-3 text-sm">
+                <span>{formattedDate}</span>
+                <span className="mx-2">•</span>
+                <span>{formattedCategory}</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white font-poppins">
+                {post.titulo}
+              </h1>
+            </div>
+          </div>
+        </div>
+        
+        {/* Post Content */}
+        <div className="container mx-auto px-4 py-10">
+          <div className="max-w-3xl mx-auto">
+            <Link to="/blog" className="inline-flex items-center text-primary hover:underline mb-8">
+              <ArrowLeft className="mr-1 h-4 w-4" />
+              Voltar para o blog
             </Link>
             
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{post.titulo}</h1>
-            
-            <div className="flex items-center text-sm text-muted-foreground mb-6">
-              <span>{formatDate(post.data_publicacao)}</span>
-              <span className="mx-2">•</span>
-              <span>5 min de leitura</span> {/* Default reading time */}
-              <span className="mx-2">•</span>
-              <span>
-                <Link 
-                  to={`/blog/${post.categoria}`} 
-                  className="hover:text-primary hover:underline"
-                >
-                  {post.categoria}
-                </Link>
-              </span>
-            </div>
-            
-            <div className="mb-8">
-              <img 
-                src={post.imagem_destaque} 
-                alt={post.titulo}
-                className="w-full h-auto rounded-lg object-cover"
-                style={{ maxHeight: "500px" }}
-              />
-            </div>
-            
-            <div className="prose prose-lg max-w-none"
-                 dangerouslySetInnerHTML={{ __html: post.conteudo }}
+            <div 
+              className="prose prose-lg max-w-none font-sansation"
+              dangerouslySetInnerHTML={{ __html: post.conteudo }} 
             />
             
-            <div className="flex items-center mt-8 pt-6 border-t border-border">
-              <div className="mr-4">
-                <img 
-                  src="/lovable-uploads/2413e882-78d7-43eb-8317-c8ec49076e7c.png" 
-                  alt="NEXSYN"
-                  className="h-12 w-12 rounded-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="font-medium">NEXSYN</p>
-                <p className="text-sm text-muted-foreground">Equipe NEXSYN</p>
+            <div className="mt-12 pt-8 border-t border-border">
+              <div className="flex flex-wrap items-center justify-between">
+                <div>
+                  <span className="text-sm text-muted-foreground">Categoria:</span>
+                  <Link 
+                    to={`/blog/${post.categoria}`}
+                    className="ml-2 text-primary hover:underline"
+                  >
+                    {formattedCategory}
+                  </Link>
+                </div>
+                
+                <div className="mt-4 md:mt-0">
+                  <Button asChild variant="outline">
+                    <Link to="/blog">
+                      Ver todos os artigos
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-          
-          <RelatedPostsSidebar 
-            category={post.categoria}
-            currentPostSlug={post.slug}
-            relatedPosts={[]} // We'll update this later
-          />
         </div>
       </main>
       
       <Footer />
-      <ScrollToTop />
-    </>
+    </div>
   );
 };
 

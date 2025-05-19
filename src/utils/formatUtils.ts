@@ -25,19 +25,3 @@ export function readableToSlug(text: string): string {
     .replace(/\s+/g, '-')
     .replace(/[^\w\-]/g, '');
 }
-
-/**
- * Formata uma data ISO para exibição no formato brasileiro (DD de Mês de YYYY)
- */
-export function formatDate(dateString: string): string {
-  if (!dateString) return '';
-  
-  const date = new Date(dateString);
-  
-  // Formatação usando o método Intl.DateTimeFormat
-  return new Intl.DateTimeFormat('pt-BR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }).format(date);
-}

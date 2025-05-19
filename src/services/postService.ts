@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { Post } from "@/types/Post";
 import { slugToReadable, readableToSlug } from "@/utils/formatUtils";
@@ -12,11 +13,11 @@ function normalizeCategorySlug(categoria?: string): string | undefined {
   return readableToSlug(categoria);
 }
 
-export async function getPosts(page = 1, postsPerPage = 9, category?: string, search?: string) {
+export async function getPosts(limit = 6, category?: string) {
   try {
     let query = supabase
       .from('posts_blog')
-      .select('*', { count: 'exact' })
+      .select('*')
       .eq('status', 'publicado')
       .order('data_publicacao', { ascending: false });
     
@@ -25,31 +26,21 @@ export async function getPosts(page = 1, postsPerPage = 9, category?: string, se
       query = query.eq('categoria', category);
     }
     
-    if (search) {
-      // Se há um termo de busca, filtramos por ele
-      query = query.or(`titulo.ilike.%${search}%,conteudo.ilike.%${search}%,resumo.ilike.%${search}%`);
+    if (limit > 0) {
+      query = query.limit(limit);
     }
     
-    // Calcular o offset baseado na página atual e número de posts por página
-    const from = (page - 1) * postsPerPage;
-    const to = from + postsPerPage - 1;
-    
-    query = query.range(from, to);
-    
-    const { data, error, count } = await query;
+    const { data, error } = await query;
     
     if (error) {
       console.error('Error fetching posts:', error);
-      return { posts: [], total: 0 };
+      return [];
     }
     
-    return {
-      posts: data as Post[],
-      total: count || 0
-    };
+    return data as Post[];
   } catch (error) {
     console.error('Error in getPosts:', error);
-    return { posts: [], total: 0 };
+    return [];
   }
 }
 
