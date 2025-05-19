@@ -41,11 +41,11 @@ const Index = () => {
     const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
     const endIndex = startIndex + POSTS_PER_PAGE;
     
-    // Simulate loading delay - reduced for better performance
+    // Simulate loading delay
     setTimeout(() => {
       setDisplayedPosts(filteredPosts.slice(startIndex, endIndex));
       setLoading(false);
-    }, 300); // Reduced from 500ms to 300ms for better performance
+    }, 500);
     
   }, [filteredPosts, currentPage]);
 
@@ -67,20 +67,12 @@ const Index = () => {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
-  
-  // Generate dynamic SEO metadata based on category
-  const categoryTitle = getCategoryTitle();
-  const seoTitle = category ? `${categoryTitle} - Blog` : "Blog";
-  const seoDescription = category 
-    ? `NEXSYN ${categoryTitle} - Artigos sobre ${categoryTitle.toLowerCase()} e tecnologia`
-    : "Blog NEXSYN - Acompanhe as últimas notícias e artigos sobre gestão empresarial, tecnologia e inovação";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <SEO 
-        title={seoTitle}
-        description={seoDescription}
-        canonical={category ? `https://nexsyn.com.br/blog/${category}` : "https://nexsyn.com.br/blog"}
+        title={getCategoryTitle()} 
+        description={`NEXSYN ${getCategoryTitle()} - Artigos sobre gestão empresarial e tecnologia`}
       />
       <Navbar />
       
