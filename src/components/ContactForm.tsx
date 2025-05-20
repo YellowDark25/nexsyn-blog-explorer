@@ -34,6 +34,18 @@ const ContactForm = () => {
     setSubmitting(true);
 
     try {
+      // Prepare the webhook payload
+      const webhookUrl = 'https://n8n-wh.nexsyn.com.br/webhook-test/set/lead';
+      const webhookPayload = {
+        nome: formData.nome,
+        email: formData.email,
+        telefone: formData.telefone,
+        empresa: formData.empresa,
+        mensagem: formData.mensagem,
+        data_envio: new Date().toISOString(),
+        origem: 'Site Nexsyn - Blog'
+      };
+
       // Prepare the email template parameters
       const templateParams = {
         to_email: 'kleversonsilva.kl@gmail.com',
@@ -45,15 +57,28 @@ const ContactForm = () => {
         reply_to: formData.email
       };
 
+      // Send data to webhook
+      const webhookResponse = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookPayload),
+      });
+
+      if (!webhookResponse.ok) {
+        throw new Error('Falha ao enviar para o webhook');
+      }
+
       // Send email using EmailJS
-      const result = await emailjs.send(
+      const emailResult = await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         templateParams,
         EMAILJS_PUBLIC_KEY
       );
 
-      if (result.status === 200) {
+      if (emailResult.status === 200) {
         toast({
           title: "Mensagem enviada",
           description: "Agradecemos seu contato! Retornaremos em breve.",
@@ -71,7 +96,7 @@ const ContactForm = () => {
         throw new Error("Falha ao enviar o email");
       }
     } catch (error) {
-      console.error("Erro ao enviar email:", error);
+      console.error("Erro ao processar o formulário:", error);
       toast({
         title: "Erro",
         description: "Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.",
