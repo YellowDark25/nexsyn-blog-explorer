@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { MessageSquare, Menu, X } from 'lucide-react';
 
-const WHATSAPP_URL = "https://api.whatsapp.com/send/?phone=556592934536&text=Eu+tenho+interesse+no+Sistema+da+NEXSYN%21&type=phone_number&app_absent=0";
+const WHATSAPP_URL = "https://api.whatsapp.com/send/?phone=556592934536&text=Venho%20através%20do%20blog%2C%20tenho%20interesse%20no%20sistema%20PDVLegal%21&type=phone_number&app_absent=0";
 
 interface NavbarProps {
   onContactClick?: () => void;

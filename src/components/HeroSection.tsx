@@ -22,43 +22,51 @@ const HeroSection = () => {
         aria-hidden="true" 
       />
       
-      {/* Product images - positioned to the right with animation */}
-      <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 hidden lg:block pr-16">
-        <div>
-          <img src="/lovable-uploads/45346a3d-16d1-4d5a-9158-3dfba5c3c19c.png" alt="PDV Legal Card Machine" className="h-80 object-contain animate-fade-in drop-shadow-2xl" />
-        </div>
-      </div>
-      
-      {/* Content with improved typography and animations */}
-      <div className="container mx-auto px-6 relative z-20 text-left max-w-6xl">
-        <div className="max-w-2xl">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-xl leading-tight drop-shadow-xl font-poppins animate-fade-in mb-6">
-            Seu atendimento está <span className="text-primary">abrindo portas</span> ou perdendo clientes?
-          </h1>
-          
-          <p className="text-white/90 text-lg mb-8 max-w-lg animate-fade-in" style={{animationDelay: '0.2s'}}>
-            Prático e intuitivo de usar, nosso PDV oferece agilidade e facilidade no ponto de venda.
-          </p>
-          
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary mb-8 tracking-wide animate-fade-in" style={{animationDelay: '0.4s'}}>
-            O SISTEMA MAIS ÁGIL DO MERCADO!
-          </h2>
-          
-          <a 
-            href="https://nexsyn.com.br/pdvlegal" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="animate-fade-in"
-            style={{animationDelay: '0.6s'}}
-          >
-            <Button 
-              size="lg" 
-              className="px-8 py-6 text-lg font-medium bg-primary hover:bg-primary/90 transition-all duration-300 shadow-lg group"
-            >
-              Saiba Mais
-              <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </a>
+      <div className="container mx-auto px-4 sm:px-6 relative z-20 h-full flex items-center">
+        <div className="w-full max-w-6xl mx-auto">
+          <div className="flex flex-col lg:flex-row items-center">
+            {/* Content with improved typography and animations */}
+            <div className="lg:w-1/2 lg:pr-8">
+              <div className="max-w-xl">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-xl font-poppins animate-fade-in mb-6">
+                  Seu atendimento está <span className="text-primary">abrindo portas</span> ou perdendo clientes?
+                </h1>
+                
+                <p className="text-white/90 text-lg mb-8 animate-fade-in" style={{animationDelay: '0.2s'}}>
+                  Prático e intuitivo de usar, nosso PDV oferece agilidade e facilidade no ponto de venda.
+                </p>
+                
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary mb-8 tracking-wide animate-fade-in" style={{animationDelay: '0.4s'}}>
+                  O SISTEMA MAIS ÁGIL DO MERCADO!
+                </h2>
+                
+                <a 
+                  href="https://nexsyn.com.br/pdvlegal" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block animate-fade-in"
+                  style={{animationDelay: '0.6s'}}
+                >
+                  <Button 
+                    size="lg" 
+                    className="px-8 py-6 text-lg font-medium bg-primary hover:bg-primary/90 transition-all duration-300 shadow-lg group"
+                  >
+                    Saiba Mais
+                    <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </a>
+              </div>
+            </div>
+            
+            {/* Product images - positioned to the right with animation */}
+            <div className="lg:w-1/2 mt-12 lg:mt-0 flex justify-center lg:justify-end">
+              <img 
+                src="/lovable-uploads/934a6d72-cf72-4481-8c59-0970036520d0.png" 
+                alt="PDV Legal Card Machine" 
+                className="h-80 object-contain animate-fade-in drop-shadow-2xl" 
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

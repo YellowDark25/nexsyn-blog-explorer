@@ -11,33 +11,31 @@ import { slugToReadable } from '@/utils/formatUtils';
 
 interface RelatedPostsSidebarProps {
   category: string;
-  currentPostSlug: string;
   relatedPosts: Post[];
 }
 
 const RelatedPostsSidebar: React.FC<RelatedPostsSidebarProps> = ({
   category,
-  currentPostSlug,
   relatedPosts
 }) => {
   const formattedCategory = slugToReadable(category);
   
   return (
-    <div className="sticky top-24 space-y-6">
+    <div className="sticky top-24 space-y-4">
       {/* Related Posts */}
       <Card className="border-border/40 shadow-md">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-xl text-primary">Artigos Relacionados</CardTitle>
-          <CardDescription>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg text-primary">Artigos Relacionados</CardTitle>
+          <CardDescription className="text-xs">
             Mais sobre {formattedCategory}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3">
           {relatedPosts.length > 0 ? (
             relatedPosts.map(post => (
               <Link key={post.id} to={`/posts/${post.slug}`} className="block group">
                 <div className="flex gap-3 items-start">
-                  <div className="h-16 w-16 flex-shrink-0 rounded-md overflow-hidden">
+                  <div className="h-14 w-14 flex-shrink-0 rounded-md overflow-hidden">
                     <img 
                       src={post.imagem_destaque} 
                       alt={post.titulo}
@@ -45,10 +43,10 @@ const RelatedPostsSidebar: React.FC<RelatedPostsSidebarProps> = ({
                     />
                   </div>
                   <div>
-                    <h3 className="font-medium line-clamp-2 group-hover:text-primary transition-colors">
+                    <h3 className="font-medium text-sm line-clamp-2 group-hover:text-primary transition-colors">
                       {post.titulo}
                     </h3>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-[11px] text-muted-foreground mt-0.5">
                       {format(parseISO(post.data_publicacao), 'dd MMM yyyy', { locale: ptBR })}
                     </p>
                   </div>

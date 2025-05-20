@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import RelatedPostsSidebar from '@/components/RelatedPostsSidebar';
 import ScrollToTop from '@/components/ScrollToTop';
-import { getPostBySlug } from '@/services/postService';
+import { getPostBySlug, getPosts } from '@/services/postService';
 import { Post } from '@/types/Post';
 import { formatDate } from '@/utils/formatUtils';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -14,24 +14,46 @@ import SEO from '@/components/SEO';
 const PostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Helper function to fetch related posts
+  const fetchRelatedPosts = async (category: string, excludeSlug: string) => {
+    try {
+      const { posts } = await getPosts(1, 4, category);
+      // Filter out the current post and limit to 3 related posts
+      return posts.filter(post => post.slug !== excludeSlug).slice(0, 3);
+    } catch (error) {
+      console.error('Error fetching related posts:', error);
+      return [];
+    }
+  };
+
   useEffect(() => {
-    const fetchPost = async () => {
-      if (slug) {
-        setIsLoading(true);
-        try {
-          const postData = await getPostBySlug(slug);
-          setPost(postData);
-          setIsLoading(false);
-        } catch (error) {
-          console.error("Error fetching post:", error);
-          setIsLoading(false);
+    const fetchPostAndRelated = async () => {
+      if (!slug) return;
+      
+      setIsLoading(true);
+      try {
+        // Fetch the main post
+        const postData = await getPostBySlug(slug);
+        if (!postData) return;
+        
+        setPost(postData);
+        
+        // Fetch related posts from the same category
+        if (postData.categoria) {
+          const related = await fetchRelatedPosts(postData.categoria, slug);
+          setRelatedPosts(related);
         }
+      } catch (error) {
+        console.error("Error fetching post data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchPost();
+    fetchPostAndRelated();
     window.scrollTo(0, 0);
   }, [slug]);
 
@@ -79,16 +101,16 @@ const PostDetail = () => {
         type="article"
         article={{
           publishedTime: post.data_publicacao,
-          modifiedTime: post.data_publicacao, // Assuming no separate updated date
-          author: "NEXSYN", // Using default author
-          tags: [post.categoria] // Using the category as a tag
+          modifiedTime: post.data_publicacao,
+          author: "NEXSYN",
+          tags: [post.categoria]
         }}
       />
       <Navbar />
       
-      <main className="container mx-auto px-4 py-8 md:py-12 lg:max-w-7xl">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-2/3">
+      <main className="container mx-auto px-4 py-8 md:py-12 lg:max-w-6xl">
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="lg:w-3/4">
             <Link 
               to="/blog" 
               className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4"
@@ -127,26 +149,35 @@ const PostDetail = () => {
                  dangerouslySetInnerHTML={{ __html: post.conteudo }}
             />
             
-            <div className="flex items-center mt-8 pt-6 border-t border-border">
-              <div className="mr-4">
-                <img 
-                  src="/lovable-uploads/2413e882-78d7-43eb-8317-c8ec49076e7c.png" 
-                  alt="NEXSYN"
-                  className="h-12 w-12 rounded-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="font-medium">NEXSYN</p>
-                <p className="text-sm text-muted-foreground">Equipe NEXSYN</p>
+            {/* Author Section */}
+            <div className="mt-12 pt-8 border-t border-border">
+              <h3 className="text-lg font-semibold mb-4">Sobre o autor</h3>
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <img 
+                    src="/lovable-uploads/Kleverson-CUbTOqrG.png" 
+                    alt="Kleverson Silva Jara"
+                    className="h-16 w-16 rounded-full object-cover border-2 border-primary/20"
+                    onError={(e) => {
+                      // Fallback image if the main image fails to load
+                      (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=Kleverson+Jara&background=random';
+                    }}
+                  />
+                </div>
+                <div>
+                  <h4 className="font-medium text-lg">Kleverson Silva Jara</h4>
+                  <p className="text-muted-foreground text-sm mb-2">Especialista em Tecnologia e Inovação</p>
+                </div>
               </div>
             </div>
           </div>
           
-          <RelatedPostsSidebar 
-            category={post.categoria}
-            currentPostSlug={post.slug}
-            relatedPosts={[]} // We'll update this later
-          />
+          <div className="lg:w-1/4">
+            <RelatedPostsSidebar 
+              category={post.categoria}
+              relatedPosts={relatedPosts}
+            />
+          </div>
         </div>
       </main>
       

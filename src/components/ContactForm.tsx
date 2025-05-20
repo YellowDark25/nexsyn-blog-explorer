@@ -5,8 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client'; // ajuste se o path for diferente
-import { TablesInsert } from '@/integrations/supabase/types';
+import emailjs from '@emailjs/browser';
+
+// Initialize EmailJS with your public key
+const EMAILJS_SERVICE_ID = 'service_llv3af7'; // Replace with your actual service ID
+const EMAILJS_TEMPLATE_ID = 'template_k70ezky'; // Replace with your actual template ID
+const EMAILJS_PUBLIC_KEY = 'GnEuGY-_ys0D1UkXp'; // Replace with your actual public key
 
 
 const ContactForm = () => {
@@ -30,35 +34,44 @@ const ContactForm = () => {
     setSubmitting(true);
 
     try {
-      const payload: TablesInsert<"contatos"> = {
-        nome: formData.nome,
-        email: formData.email,
-        telefone: formData.telefone,
-        empresa: formData.empresa,
-        mensagem: formData.mensagem,
-        data_envio: new Date().toISOString(), // opcional, pode ser default no banco
+      // Prepare the email template parameters
+      const templateParams = {
+        to_email: 'kleversonsilva.kl@gmail.com',
+        from_name: formData.nome,
+        from_email: formData.email,
+        phone: formData.telefone,
+        company: formData.empresa,
+        message: formData.mensagem,
+        reply_to: formData.email
       };
-  
-      const { error } = await supabase.from("contatos").insert(payload);
-  
-      if (error) {
-        throw error;
+
+      // Send email using EmailJS
+      const result = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY
+      );
+
+      if (result.status === 200) {
+        toast({
+          title: "Mensagem enviada",
+          description: "Agradecemos seu contato! Retornaremos em breve.",
+        });
+
+        // Reset form
+        setFormData({
+          nome: "",
+          email: "",
+          telefone: "",
+          empresa: "",
+          mensagem: "",
+        });
+      } else {
+        throw new Error("Falha ao enviar o email");
       }
-  
-      toast({
-        title: "Mensagem enviada",
-        description: "Agradecemos seu contato! Retornaremos em breve.",
-      });
-  
-      setFormData({
-        nome: "",
-        email: "",
-        telefone: "",
-        empresa: "",
-        mensagem: "",
-      });
     } catch (error) {
-      console.error("Erro ao enviar para o Supabase:", error);
+      console.error("Erro ao enviar email:", error);
       toast({
         title: "Erro",
         description: "Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.",

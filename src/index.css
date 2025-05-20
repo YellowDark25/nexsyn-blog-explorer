@@ -94,6 +94,14 @@
     transform: scaleX(1);
   }
 
+  .blog-card-hover:hover .blog-card-image img {
+    transform: scale(1.05);
+  }
+  
+  .blog-card-hover:hover .blog-card-image::after {
+    opacity: 1;
+  }
+  
   /* Blog card image hover effect */
   .blog-card-image {
     @apply overflow-hidden rounded-t-md;
@@ -181,5 +189,52 @@
   .hover-underline-animation:hover:after {
     transform: scaleX(1);
     transform-origin: bottom left;
+  }
+  
+  /* Ensure proper styling for post content */
+  .prose strong {
+    color: hsl(var(--foreground));
+    font-weight: 700;
+    background-color: transparent;
+  }
+  
+  /* Ensure links within post content are styled correctly */
+  .prose a {
+    color: hsl(var(--primary));
+    text-decoration: none;
+  }
+  
+  .prose a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Style headings in post content */
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    color: hsl(var(--foreground));
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  
+  /* Add some spacing after paragraphs */
+  .prose p {
+    margin-bottom: 1rem;
+  }
+  
+  /* Style lists */
+  .prose ul,
+  .prose ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+  
+  .prose li {
+    margin-bottom: 0.5rem;
   }
 }

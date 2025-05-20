@@ -76,7 +76,12 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#contact" className="text-foreground hover:text-primary transition-colors hover:translate-x-1 inline-flex">
+                <a 
+                  href="https://wa.me/5565992934536?text=Venho%20através%20do%20blog%2C%20tenho%20interesse%20no%20sistema%20PDVLegal" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground hover:text-primary transition-colors hover:translate-x-1 inline-flex"
+                >
                   Contate-nos
                 </a>
               </li>
