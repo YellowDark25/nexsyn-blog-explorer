@@ -5,12 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import emailjs from '@emailjs/browser';
-
-// Initialize EmailJS with your public key
-const EMAILJS_SERVICE_ID = 'service_llv3af7'; // Replace with your actual service ID
-const EMAILJS_TEMPLATE_ID = 'template_k70ezky'; // Replace with your actual template ID
-const EMAILJS_PUBLIC_KEY = 'GnEuGY-_ys0D1UkXp'; // Replace with your actual public key
 
 
 const ContactForm = () => {
@@ -35,7 +29,7 @@ const ContactForm = () => {
 
     try {
       // Prepare the webhook payload
-      const webhookUrl = 'https://n8n-wh.nexsyn.com.br/webhook-test/set/lead';
+      const webhookUrl = 'https://n8n-wh.nexsyn.com.br/webhook/set/lead';
       const webhookPayload = {
         nome: formData.nome,
         email: formData.email,
@@ -46,18 +40,6 @@ const ContactForm = () => {
         origem: 'Site Nexsyn - Blog'
       };
 
-      // Prepare the email template parameters
-      const templateParams = {
-        to_email: 'kleversonsilva.kl@gmail.com',
-        from_name: formData.nome,
-        from_email: formData.email,
-        phone: formData.telefone,
-        company: formData.empresa,
-        message: formData.mensagem,
-        reply_to: formData.email
-      };
-
-      // Send data to webhook
       const webhookResponse = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -65,36 +47,24 @@ const ContactForm = () => {
         },
         body: JSON.stringify(webhookPayload),
       });
-
+      
       if (!webhookResponse.ok) {
-        throw new Error('Falha ao enviar para o webhook');
+        throw new Error('Erro ao enviar mensagem');
       }
 
-      // Send email using EmailJS
-      const emailResult = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
-      );
+      toast({
+        title: "Mensagem enviada",
+        description: "Agradecemos seu contato! Retornaremos em breve.",
+      });
 
-      if (emailResult.status === 200) {
-        toast({
-          title: "Mensagem enviada",
-          description: "Agradecemos seu contato! Retornaremos em breve.",
-        });
-
-        // Reset form
-        setFormData({
-          nome: "",
-          email: "",
-          telefone: "",
-          empresa: "",
-          mensagem: "",
-        });
-      } else {
-        throw new Error("Falha ao enviar o email");
-      }
+      // Reset form
+      setFormData({
+        nome: "",
+        email: "",
+        telefone: "",
+        empresa: "",
+        mensagem: "",
+      });
     } catch (error) {
       console.error("Erro ao processar o formulário:", error);
       toast({
@@ -108,67 +78,83 @@ const ContactForm = () => {
   };
 
   return (
-    <section id="contato" className="py-16 bg-background">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 font-poppins">ENTRE EM CONTATO</h2>
+    <section id="contato" className="py-8 sm:py-12 md:py-16 lg:py-20 bg-background">
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 font-poppins text-foreground">Entre em Contato</h2>
+          <div className="w-16 h-1 bg-primary mx-auto rounded-full"></div>
+        </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-10">
           {/* Contact Information */}
-          <div className="bg-card p-8 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-6 font-poppins">Você pode nos encontrar aqui</h3>
+          <div className="bg-card p-6 sm:p-7 md:p-8 rounded-xl shadow-sm border border-border/30 w-full h-full">
+            <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 md:mb-8 font-poppins text-foreground">Você pode nos encontrar aqui</h3>
             
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <Mail className="text-primary h-5 w-5 mt-0.5" />
-                <div>
-                  <h4 className="font-medium">Email</h4>
-                  <a href="mailto:nexsyn@unidadelrv.com.br" className="text-muted-foreground hover:text-primary transition-colors">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
+              <div className="flex items-start space-x-3 sm:space-x-4">
+                <div className="bg-primary/10 p-2 rounded-lg flex-shrink-0">
+                  <Mail className="text-primary h-5 w-5 sm:h-6 sm:w-6" />
+                </div>
+                <div className="break-words overflow-hidden">
+                  <h4 className="font-medium text-sm sm:text-base text-muted-foreground mb-0.5">Email</h4>
+                  <a 
+                    href="mailto:nexsyn@unidadelrv.com.br" 
+                    className="text-foreground hover:text-primary transition-colors text-sm sm:text-base font-medium break-all"
+                  >
                     nexsyn@unidadelrv.com.br
                   </a>
                 </div>
               </div>
               
-              <div className="flex items-start space-x-4">
-                <Phone className="text-primary h-5 w-5 mt-0.5" />
+              <div className="flex items-start space-x-3 sm:space-x-4">
+                <div className="bg-primary/10 p-2 rounded-lg flex-shrink-0">
+                  <Phone className="text-primary h-5 w-5 sm:h-6 sm:w-6" />
+                </div>
                 <div>
-                  <h4 className="font-medium">Telefone</h4>
-                  <a href="tel:+556592934536" className="text-muted-foreground hover:text-primary transition-colors">
+                  <h4 className="font-medium text-sm sm:text-base text-muted-foreground mb-0.5">Telefone</h4>
+                  <a 
+                    href="tel:+556592934536" 
+                    className="text-foreground hover:text-primary transition-colors text-sm sm:text-base font-medium"
+                  >
                     +55 65 9293-4536
                   </a>
                 </div>
               </div>
               
-              <div className="flex items-start space-x-4">
-                <MapPin className="text-primary h-5 w-5 mt-0.5" />
+              <div className="flex items-start space-x-3 sm:space-x-4">
+                <div className="bg-primary/10 p-2 rounded-lg flex-shrink-0 mt-0.5">
+                  <MapPin className="text-primary h-5 w-5 sm:h-6 sm:w-6" />
+                </div>
                 <div>
-                  <h4 className="font-medium">Endereço</h4>
-                  <address className="text-muted-foreground not-italic">
-                    Sala Comercial Espelhada, Av. Dep. Hitler Sansão – Centro, <br />
-                    Barra do Bugres – MT, 78390-000
+                  <h4 className="font-medium text-sm sm:text-base text-muted-foreground mb-0.5">Endereço</h4>
+                  <address className="text-foreground not-italic text-sm sm:text-base leading-snug">
+                    <p className="mb-0.5">Sala Comercial Espelhada,</p>
+                    <p className="mb-0.5">Av. Dep. Hitler Sansão – Centro,</p>
+                    <p>Barra do Bugres – MT, 78390-000</p>
                   </address>
                 </div>
               </div>
               
-              <div className="pt-4">
-                <h4 className="font-medium mb-3">Siga-nos</h4>
+              <div className="pt-3 sm:pt-4">
+                <h4 className="font-medium mb-3 sm:mb-4 text-sm sm:text-base text-muted-foreground">Siga-nos</h4>
                 <div className="flex space-x-4">
                   <a 
                     href="https://www.instagram.com/nexsyn.oficial/" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="bg-card text-foreground hover:text-primary p-2 rounded-full transition-colors"
+                    className="bg-muted text-foreground hover:bg-muted/80 hover:text-primary p-2.5 rounded-full transition-all"
                     aria-label="Instagram"
                   >
-                    <Instagram className="h-6 w-6" />
+                    <Instagram className="h-5 w-5 sm:h-6 sm:w-6" />
                   </a>
                   <a 
                     href="https://www.youtube.com/" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="bg-card text-foreground hover:text-primary p-2 rounded-full transition-colors"
+                    className="bg-muted text-foreground hover:bg-muted/80 hover:text-primary p-2.5 rounded-full transition-all"
                     aria-label="YouTube"
                   >
-                    <Youtube className="h-6 w-6" />
+                    <Youtube className="h-5 w-5 sm:h-6 sm:w-6" />
                   </a>
                 </div>
               </div>
@@ -176,63 +162,84 @@ const ContactForm = () => {
           </div>
           
           {/* Contact Form */}
-          <div className="bg-card p-8 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-6 font-poppins">Envie uma mensagem</h3>
+          <div className="bg-card p-6 sm:p-7 md:p-8 rounded-xl shadow-sm border border-border/30 w-full">
+            <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 md:mb-8 font-poppins text-foreground">Envie uma mensagem</h3>
             
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Input
-                  name="nome"
-                  placeholder="Nome"
-                  value={formData.nome}
-                  onChange={handleChange}
-                  required
-                />
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="space-y-1.5">
+                  <Input
+                    name="nome"
+                    placeholder="Nome"
+                    value={formData.nome}
+                    onChange={handleChange}
+                    required
+                    className="h-11 sm:h-12 text-sm sm:text-base"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Input
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="h-11 sm:h-12 text-sm sm:text-base"
+                  />
+                </div>
               </div>
-              <div>
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="space-y-1.5">
+                  <Input
+                    name="telefone"
+                    placeholder="Telefone"
+                    value={formData.telefone}
+                    onChange={handleChange}
+                    required
+                    className="h-11 sm:h-12 text-sm sm:text-base"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Input
+                    name="empresa"
+                    placeholder="Nome da empresa"
+                    value={formData.empresa}
+                    onChange={handleChange}
+                    required
+                    className="h-11 sm:h-12 text-sm sm:text-base"
+                  />
+                </div>
               </div>
-              <div>
-                <Input
-                  name="telefone"
-                  placeholder="Telefone"
-                  value={formData.telefone}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <Input
-                  name="empresa"
-                  placeholder="Nome da empresa"
-                  value={formData.empresa}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
+              
+              <div className="space-y-1.5">
                 <Textarea
                   name="mensagem"
                   placeholder="Sua mensagem"
                   value={formData.mensagem}
                   onChange={handleChange}
-                  rows={4}
+                  rows={5}
+                  className="text-sm sm:text-base min-h-[120px]"
                 />
               </div>
               
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/90"
+              <Button 
+                type="submit" 
+                className="w-full bg-primary hover:bg-primary/90 transition-all h-12 sm:h-14 text-sm sm:text-base font-medium mt-2 sm:mt-4"
                 disabled={submitting}
               >
-                {submitting ? 'Enviando...' : 'Enviar'}
+                {submitting ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Enviando...
+                  </>
+                ) : (
+                  'Enviar mensagem'
+                )}
               </Button>
             </form>
           </div>
