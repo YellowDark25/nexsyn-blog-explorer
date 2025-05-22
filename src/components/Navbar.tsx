@@ -44,26 +44,29 @@ const Navbar = () => {
   
   return (
     <header 
-      className={`sticky top-0 z-50 w-full bg-nexsyn-darkBlue border-b border-border/40 py-3 shadow-md transition-all duration-300 ${
+      className={`sticky top-0 z-50 w-full bg-nexsyn-darkBlue border-b border-border/40 py-2 sm:py-3 shadow-md transition-all duration-300 ${
         scrolled ? 'bg-opacity-95 backdrop-blur-sm shadow-lg' : ''
       }`}
     >
-      <div className="container mx-auto px-4 flex items-center justify-between">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center">
           <img 
             alt="Nexsyn Logo" 
-            className="h-10 transition-transform duration-300 hover:scale-105" 
+            className="h-8 sm:h-10 transition-transform duration-300 hover:scale-105" 
             src="/lovable-uploads/2413e882-78d7-43eb-8317-c8ec49076e7c.png"
             loading="lazy"
+            width={120}
+            height={40}
           />
         </Link>
         
         {/* Mobile menu button */}
         <div className="md:hidden">
           <button 
-            className="text-foreground hover:text-primary transition-colors p-1" 
+            className="text-foreground hover:text-primary transition-colors p-2 -mr-2" 
             onClick={toggleMobileMenu} 
             aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
               <X className="h-6 w-6" />
@@ -76,67 +79,61 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:block">
           <NavigationMenu>
-            <NavigationMenuList>
+            <NavigationMenuList className="flex items-center space-x-1">
               <NavigationMenuItem>
                 <Link 
                   to="/" 
-                  className={`${navigationMenuTriggerStyle()} ${location.pathname === '/' ? 'text-primary font-semibold' : ''}`}
+                  className={`${navigationMenuTriggerStyle()} text-sm sm:text-base ${
+                    location.pathname === '/' ? 'text-primary font-semibold' : 'text-foreground hover:text-primary'
+                  }`}
                 >
                   Home
                 </Link>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <NavigationMenuTrigger className={location.pathname.includes('/blog') ? 'text-primary font-semibold' : ''}>
+                <NavigationMenuTrigger 
+                  className={`text-sm sm:text-base ${
+                    location.pathname.includes('/blog') ? 'text-primary font-semibold' : 'text-foreground hover:text-primary'
+                  }`}
+                >
                   Blogs
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <div className="grid gap-3 p-4 w-[240px] bg-gradient-to-b from-card to-card/95 backdrop-blur-sm">
-                    <Link to="/blog" className={`${navigationMenuTriggerStyle()} ${location.pathname === '/blog' ? 'text-primary font-semibold' : ''}`}>
+                  <div className="grid gap-1 p-2 w-[200px] sm:w-[240px] bg-gradient-to-b from-card to-card/95 backdrop-blur-sm">
+                    <Link 
+                      to="/blog" 
+                      className={`${navigationMenuTriggerStyle()} justify-start text-sm sm:text-base ${
+                        location.pathname === '/blog' ? 'text-primary font-semibold' : ''
+                      }`}
+                    >
                       Todos os Blogs
                     </Link>
-                    <Link to="/blog/gestao-interna" className={navigationMenuTriggerStyle()}>
+                    <Link 
+                      to="/blog/gestao-interna" 
+                      className={`${navigationMenuTriggerStyle()} justify-start text-sm sm:text-base`}
+                    >
                       Gestão Interna
                     </Link>
-                    <Link to="/blog/tecnologia" className={navigationMenuTriggerStyle()}>
+                    <Link 
+                      to="/blog/tecnologia" 
+                      className={`${navigationMenuTriggerStyle()} justify-start text-sm sm:text-base`}
+                    >
                       Tecnologia
                     </Link>
-                    <Link to="/blog/foodservice" className={navigationMenuTriggerStyle()}>
-                      Foodservice
-                    </Link>
-                    <Link to="/blog/inteligencia-artificial" className={navigationMenuTriggerStyle()}>
-                      Inteligência Artificial
-                    </Link>
-                    <Link to="/blog/empresas-alimenticias" className={navigationMenuTriggerStyle()}>
-                      Empresas Alimentícias
-                    </Link>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Institucional</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid gap-3 p-4 w-[240px] bg-gradient-to-b from-card to-card/95 backdrop-blur-sm">
-                    <a href="https://nexsyn.com.br/" target="_blank" rel="noopener noreferrer" className={navigationMenuTriggerStyle()}>
-                      Institucional
-                    </a>
-                    <a href="https://nexsyn.com.br/sobre" target="_blank" rel="noopener noreferrer" className={navigationMenuTriggerStyle()}>
-                      Sobre a Nexsyn
-                    </a>
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
                 <a 
-                  href={WHATSAPP_URL} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className={`${navigationMenuTriggerStyle()} flex items-center gap-2 hover:bg-primary/10 hover:text-primary transition-colors`}
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${navigationMenuTriggerStyle()} bg-primary hover:bg-primary/90 text-primary-foreground ml-1 sm:ml-2 text-sm sm:text-base`}
                 >
-                  <MessageSquare className="h-4 w-4" />
-                  Contate-nos
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  <span className="whitespace-nowrap">Fale Conosco</span>
                 </a>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -144,56 +141,77 @@ const Navbar = () => {
         </div>
         
         {/* Mobile Navigation Menu with animation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-nexsyn-darkBlue border-b border-border pt-2 pb-4 px-4 shadow-lg z-50 animate-fade-in">
-            <nav className="flex flex-col space-y-3">
+        <div 
+          className={`fixed inset-0 bg-nexsyn-darkBlue/95 backdrop-blur-sm z-40 transform transition-all duration-300 ease-in-out ${
+            mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          } md:hidden`}
+        >
+          <div className="container mx-auto px-4 py-20 h-full overflow-y-auto">
+            <nav className="flex flex-col space-y-4">
               <Link 
                 to="/" 
-                className={`text-foreground hover:text-primary py-2 transition-colors ${location.pathname === '/' ? 'text-primary font-semibold' : ''}`} 
+                className={`py-3 px-4 rounded-lg transition-colors text-lg ${
+                  location.pathname === '/' ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-muted/20'
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Home
               </Link>
               
-              <div className="py-2">
-                <div className={`font-medium mb-2 ${location.pathname.includes('/blog') ? 'text-primary' : 'text-foreground'}`}>
-                  Blogs
-                </div>
-                <div className="pl-4 flex flex-col space-y-2">
+              <div className="pt-2">
+                <h3 className="px-4 py-2 text-muted-foreground text-sm font-medium">Categorias</h3>
+                <div className="space-y-1 mt-2">
                   <Link 
                     to="/blog" 
-                    className={`text-muted-foreground hover:text-primary transition-colors ${location.pathname === '/blog' ? 'text-primary' : ''}`} 
+                    className={`block py-3 px-4 rounded-lg transition-colors text-base ${
+                      location.pathname === '/blog' ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-muted/20'
+                    }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Todos os Blogs
+                    Todos os Artigos
                   </Link>
-                  <Link to="/blog/gestao-interna" className="text-muted-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  <Link 
+                    to="/blog/gestao-interna" 
+                    className={`block py-3 px-4 rounded-lg transition-colors text-base ${
+                      location.pathname.includes('/blog/gestao-interna') ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-muted/20'
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     Gestão Interna
                   </Link>
-                  <Link to="/blog/tecnologia" className="text-muted-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  <Link 
+                    to="/blog/tecnologia" 
+                    className={`block py-3 px-4 rounded-lg transition-colors text-base ${
+                      location.pathname.includes('/blog/tecnologia') ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-muted/20'
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     Tecnologia
                   </Link>
-                  <Link to="/blog/foodservice" className="text-muted-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                    Foodservice
-                  </Link>
-                  <Link to="/blog/inteligencia-artificial" className="text-muted-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                    Inteligência Artificial
-                  </Link>
-                  <Link to="/blog/empresas-alimenticias" className="text-muted-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                    Empresas Alimentícias
-                  </Link>
                 </div>
-              </div>
-              
-              <div className="py-2">
-                <div className="font-medium text-foreground mb-2">Institucional</div>
-                <div className="pl-4 flex flex-col space-y-2">
-                  <a href="https://nexsyn.com.br/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                    Institucional
-                  </a>
-                  <a href="https://nexsyn.com.br/sobre" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                    Sobre a Nexsyn
-                  </a>
+                
+                <div className="mt-4">
+                  <h3 className="px-4 py-2 text-muted-foreground text-sm font-medium">Institucional</h3>
+                  <div className="space-y-1 mt-2">
+                    <a 
+                      href="https://nexsyn.com.br/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="block py-3 px-4 rounded-lg text-foreground hover:bg-muted/20 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Institucional
+                    </a>
+                    <a 
+                      href="https://nexsyn.com.br/sobre" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="block py-3 px-4 rounded-lg text-foreground hover:bg-muted/20 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sobre a Nexsyn
+                    </a>
+                  </div>
                 </div>
               </div>
               
@@ -201,15 +219,15 @@ const Navbar = () => {
                 href={WHATSAPP_URL} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-foreground hover:text-primary py-2 flex items-center gap-2 transition-colors" 
+                className="mt-4 inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground py-3 px-6 rounded-lg font-medium transition-colors" 
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <MessageSquare className="h-5 w-5" />
-                <span>Contate-nos</span>
+                <span>Fale Conosco</span>
               </a>
             </nav>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );
