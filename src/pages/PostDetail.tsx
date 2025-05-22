@@ -119,34 +119,37 @@ const PostDetail = () => {
               Voltar ao blog
             </Link>
             
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{post.titulo}</h1>
+            <h1 className="text-2xl xs:text-3xl md:text-4xl lg:text-[2.5rem] font-bold mb-3 sm:mb-4 leading-tight">
+              {post.titulo}
+            </h1>
             
-            <div className="flex items-center text-sm text-muted-foreground mb-6">
+            <div className="flex flex-wrap items-center text-xs xs:text-sm text-muted-foreground mb-4 sm:mb-6 gap-1.5">
               <span>{formatDate(post.data_publicacao)}</span>
-              <span className="mx-2">•</span>
-              <span>5 min de leitura</span> {/* Default reading time */}
-              <span className="mx-2">•</span>
-              <span>
+              <span className="hidden xs:inline">•</span>
+              <span className="hidden xs:inline">5 min de leitura</span>
+              <span className="hidden xs:inline">•</span>
+              <span className="inline-block bg-muted/50 px-2 py-0.5 rounded-full text-xs">
                 <Link 
                   to={`/blog/${post.categoria}`} 
-                  className="hover:text-primary hover:underline"
+                  className="hover:text-primary hover:underline whitespace-nowrap"
                 >
                   {post.categoria}
                 </Link>
               </span>
             </div>
             
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8 overflow-hidden rounded-lg">
               <img 
                 src={post.imagem_destaque} 
                 alt={post.titulo}
-                className="w-full h-auto rounded-lg object-cover"
-                style={{ maxHeight: "500px" }}
+                className="w-full h-auto max-h-[300px] sm:max-h-[400px] md:max-h-[500px] object-cover"
+                loading="lazy"
               />
             </div>
             
-            <div className="prose prose-lg max-w-none"
-                 dangerouslySetInnerHTML={{ __html: post.conteudo }}
+            <div 
+              className="prose prose-sm sm:prose-base max-w-none text-foreground/90"
+              dangerouslySetInnerHTML={{ __html: post.conteudo }}
             />
             
             {/* Author Section */}
