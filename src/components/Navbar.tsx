@@ -49,14 +49,13 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto px-3 sm:px-4 md:px-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center flex-shrink-0">
           <img 
             alt="Nexsyn Logo" 
-            className="h-8 sm:h-10 transition-transform duration-300 hover:scale-105" 
+            className="h-10 w-auto transition-transform duration-300 hover:scale-105" 
             src="/lovable-uploads/2413e882-78d7-43eb-8317-c8ec49076e7c.png"
             loading="lazy"
-            width={120}
-            height={40}
+            style={{ height: '40px', width: 'auto' }}
           />
         </Link>
         
@@ -126,14 +125,44 @@ const Navbar = () => {
               </NavigationMenuItem>
               
               <NavigationMenuItem>
+                <NavigationMenuTrigger 
+                  className={`text-sm sm:text-base ${
+                    location.pathname.includes('/institucional') ? 'text-primary font-semibold' : 'text-foreground hover:text-primary'
+                  }`}
+                >
+                  Institucional
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid gap-1 p-2 w-[200px] sm:w-[240px] bg-gradient-to-b from-card to-card/95 backdrop-blur-sm">
+                    <a 
+                      href="https://nexsyn.com.br/" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`${navigationMenuTriggerStyle()} justify-start text-sm sm:text-base`}
+                    >
+                      Site Oficial
+                    </a>
+                    <a 
+                      href="https://nexsyn.com.br/sobre" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`${navigationMenuTriggerStyle()} justify-start text-sm sm:text-base`}
+                    >
+                      Sobre Nós
+                    </a>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              
+              <NavigationMenuItem>
                 <a 
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${navigationMenuTriggerStyle()} bg-primary hover:bg-primary/90 text-primary-foreground ml-1 sm:ml-2 text-sm sm:text-base`}
+                  className={`${navigationMenuTriggerStyle()} bg-primary hover:bg-primary/90 text-primary-foreground ml-1 sm:ml-2 text-sm sm:text-base whitespace-nowrap`}
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
-                  <span className="whitespace-nowrap">Fale Conosco</span>
+                  Fale Conosco
                 </a>
               </NavigationMenuItem>
             </NavigationMenuList>
