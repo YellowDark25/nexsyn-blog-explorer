@@ -57,17 +57,25 @@ const ContactForm = () => {
         reply_to: formData.email
       };
 
-      // Send data to webhook
-      const webhookResponse = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(webhookPayload),
-      });
-
-      if (!webhookResponse.ok) {
-        throw new Error('Falha ao enviar para o webhook');
+      // Envia dados para o webhook
+      // Usamos try/catch separado para não interromper o fluxo se o webhook falhar
+      try {
+        const webhookResponse = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(webhookPayload),
+        });
+        
+        // Log para depuração
+        console.log('Resposta do webhook:', {
+          status: webhookResponse.status,
+          statusText: webhookResponse.statusText
+        });
+      } catch (error) {
+        // Apenas loga o erro, mas não impede o fluxo
+        console.error('Erro ao enviar para o webhook:', error);
       }
 
       // Send email using EmailJS
