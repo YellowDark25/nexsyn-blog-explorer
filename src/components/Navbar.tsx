@@ -143,7 +143,7 @@ const Navbar = () => {
                       Site Oficial
                     </a>
                     <a 
-                      href="https://nexsyn.com.br/sobre" 
+                      href="https://nexsyn.com.br/sobre"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`${navigationMenuTriggerStyle()} justify-start text-sm sm:text-base`}
