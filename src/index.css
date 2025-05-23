@@ -98,6 +98,24 @@
     transform: scale(1.05);
   }
   
+  /* Scroll to Top Button */
+  .scroll-to-top {
+    @apply fixed bottom-8 right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-primary/40 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, background-color 0.2s;
+  }
+
+  .scroll-to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .scroll-to-top.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
   .blog-card-hover:hover .blog-card-image::after {
     opacity: 1;
   }

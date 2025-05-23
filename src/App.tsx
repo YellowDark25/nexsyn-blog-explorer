@@ -14,6 +14,7 @@ import AdminChat from "./pages/admin/AdminChat";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AdminProvider } from "./contexts/AdminContext";
 import IntegrationsProvider from "./components/integrations/IntegrationsProvider";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Create a query client with improved configuration
 const queryClient = new QueryClient({
@@ -73,6 +74,7 @@ const App = () => {
           <TooltipProvider>
             <Toaster />
             <Sonner closeButton position="bottom-right" />
+            <ScrollToTop />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/blog" element={<BlogPage />} />
