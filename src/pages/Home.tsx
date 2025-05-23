@@ -24,7 +24,7 @@ const Home = () => {
       <Navbar />
       <main>
         <HeroSection />
-        <RecentPosts limit={6} /> {/* Ensure we're showing 6 posts on the home page */}
+        <RecentPosts limit={3} /> {/* Ensure we're showing 6 posts on the home page */}
         <ContactForm />
       </main>
       <Footer />
