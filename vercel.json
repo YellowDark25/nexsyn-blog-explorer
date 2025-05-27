@@ -4,17 +4,15 @@
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
-  "redirects": [
-    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/robots.txt", "destination": "/robots.txt" }
+  "routes": [
+    { "src": "/sitemap.xml", "dest": "/sitemap.xml", "headers": { "Content-Type": "application/xml" } },
+    { "src": "/robots.txt", "dest": "/robots.txt", "headers": { "Content-Type": "text/plain" } },
+    { "src": "/sitemap.xml", "status": 200, "headers": { "Content-Type": "application/xml" } },
+    { "src": "/robots.txt", "status": 200, "headers": { "Content-Type": "text/plain" } },
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "/index.html" }
   ],
   "headers": [
-    {
-      "source": "/sitemap.xml",
-      "headers": [
-        { "key": "Content-Type", "value": "application/xml" }
-      ]
-    },
     {
       "source": "/(.*)",
       "headers": [
