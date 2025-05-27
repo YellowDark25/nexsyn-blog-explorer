@@ -2,6 +2,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Analytics } from "@vercel/analytics/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -15,7 +16,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { AdminProvider } from "./contexts/AdminContext";
 import IntegrationsProvider from "./components/integrations/IntegrationsProvider";
 import ScrollToTop from "./components/ScrollToTop";
-
 // Create a query client with improved configuration
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -75,6 +75,7 @@ const App = () => {
             <Toaster />
             <Sonner closeButton position="bottom-right" />
             <ScrollToTop />
+            <Analytics />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/blog" element={<BlogPage />} />
