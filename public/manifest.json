@@ -1,0 +1,16 @@
+{
+  "name": "Blog da Nexsyn",
+  "short_name": "Nexsyn Blog",
+  "description": "Blog NEXSYN - Acompanhe as últimas notícias e artigos sobre gestão, tecnologia e inovação",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon-32x32-CtHxdSWX.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ]
+}
