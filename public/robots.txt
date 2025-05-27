@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nexsyn.com.br/sitemap.xml
+Sitemap: https://blog.nexsyn.com.br/sitemap.xml

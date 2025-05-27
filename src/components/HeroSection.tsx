@@ -1,76 +1,138 @@
 
 import React from 'react';
 import { Button } from './ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CheckCircle, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const HeroSection = () => {
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  };
+
+  const staggerContainer = {
+    visible: {
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
   return (
-    <section className="relative w-full bg-nexsyn-darkBlue h-auto min-h-[500px] md:h-[600px] flex items-center justify-center overflow-hidden py-16 md:py-0">
-      {/* Animated background overlay with gradient */}
-      <div 
-        className="absolute inset-0 bg-gradient-to-r from-[#031730]/95 to-[#031730]/80 z-10 animate-fade-in" 
-        aria-hidden="true" 
-      />
+    <section className="relative w-full bg-gradient-to-br from-[#0A192F] to-[#0F2A4A] overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary/5"></div>
+        
+        {/* Animated dots */}
+        <div className="absolute top-1/4 left-1/4 w-3 h-3 rounded-full bg-primary/40 animate-pulse"></div>
+        <div className="absolute top-1/3 right-1/3 w-2 h-2 rounded-full bg-primary/30 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute bottom-1/4 right-1/4 w-4 h-4 rounded-full bg-primary/20 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
       
-      {/* Background image with enhanced styling */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center z-0" 
-        style={{
-          backgroundImage: `url(https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=2940)`,
-          filter: 'brightness(0.4) contrast(1.2)'
-        }} 
-        aria-hidden="true" 
-      />
-      
-      <div className="container mx-auto px-4 sm:px-6 relative z-20 h-full flex items-center py-12 md:py-0">
-        <div className="w-full max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-center">
-            {/* Content with improved typography and animations */}
-            <div className="lg:w-1/2 lg:pr-8">
-              <div className="max-w-xl">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-white leading-tight drop-shadow-xl font-poppins animate-fade-in mb-4 sm:mb-6">
-                  Seu atendimento está <span className="text-primary">abrindo portas</span> ou perdendo clientes?
-                </h1>
-                
-                <p className="text-white/90 text-base sm:text-lg mb-6 sm:mb-8 animate-fade-in" style={{animationDelay: '0.2s'}}>
-                  Prático e intuitivo de usar, nosso PDV oferece agilidade e facilidade no ponto de venda.
-                </p>
-                
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary mb-6 sm:mb-8 tracking-wide animate-fade-in" style={{animationDelay: '0.4s'}}>
-                  O SISTEMA MAIS ÁGIL DO MERCADO!
-                </h2>
-                
-                <div className="animate-fade-in" style={{animationDelay: '0.6s'}}>
-                  <a 
-                    href="https://nexsyn.com.br/pdvlegal" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-block"
-                  >
-                    <Button 
-                      size="lg" 
-                      className="px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-medium bg-primary hover:bg-primary/90 transition-all duration-300 shadow-lg group w-full sm:w-auto text-center"
-                    >
-                      Saiba Mais
-                      <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform inline-block" />
-                    </Button>
-                  </a>
-                </div>
+      <div className="container mx-auto px-4 sm:px-6 relative z-10 py-20 md:py-28 lg:py-32">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            {/* Content */}
+            <motion.div 
+              className="lg:w-1/2 text-center lg:text-left"
+              variants={fadeInUp}
+            >
+              <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+                <Zap className="h-4 w-4 mr-2" />
+                PDV Legal - O mais completo do mercado
               </div>
-            </div>
+              
+              <motion.h1 
+                className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-white"
+                variants={fadeInUp}
+              >
+                Seu negócio <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">mais ágil</span> e eficiente
+              </motion.h1>
+              
+              <motion.p 
+                className="text-lg sm:text-xl text-muted-foreground/90 mb-8 max-w-2xl mx-auto lg:mx-0"
+                variants={fadeInUp}
+              >
+                Solução completa para gestão de vendas com tecnologia de ponta e suporte especializado para o seu negócio.
+              </motion.p>
+              
+              <motion.div 
+                className="flex flex-col sm:flex-row gap-4 mb-10"
+                variants={fadeInUp}
+              >
+                <a 
+                  href="https://nexsyn.com.br/pdvlegal" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto"
+                >
+                  <Button 
+                    size="lg" 
+                    className="w-full sm:w-auto px-8 py-6 text-base font-medium bg-primary hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 group"
+                  >
+                    Saiba Mais
+                    <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </a>
+              </motion.div>
+              
+              <motion.div 
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-muted-foreground/80"
+                variants={fadeInUp}
+              >
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-primary mr-2" />
+                  Fácil de usar
+                </div>
+                <div className="hidden sm:flex items-center">
+                  <CheckCircle className="h-4 w-4 text-primary mr-2" />
+                  Suporte 24/7
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-primary mr-2" />
+                  Segurança garantida
+                </div>
+              </motion.div>
+            </motion.div>
             
-            {/* Product images - positioned to the right with animation */}
-            <div className="lg:w-1/2 mt-12 lg:mt-0 flex justify-center lg:justify-end w-full">
-              <img 
-                src="/lovable-uploads/934a6d72-cf72-4481-8c59-0970036520d0.png" 
-                alt="PDV Legal Card Machine" 
-                className="h-64 sm:h-72 md:h-80 object-contain animate-fade-in drop-shadow-2xl" 
-                width={400}
-                height={400}
-                loading="eager"
-              />
-            </div>
-          </div>
+            {/* Image */}
+            <motion.div 
+              className="lg:w-1/2 relative"
+              variants={{
+                hidden: { opacity: 0, scale: 0.9 },
+                visible: { 
+                  opacity: 1, 
+                  scale: 1,
+                  transition: { 
+                    duration: 0.6,
+                    ease: [0.4, 0, 0.2, 1]
+                  } 
+                }
+              }}
+            >
+              <div className="relative z-10">
+                <img 
+                  src="/lovable-uploads/934a6d72-cf72-4481-8c59-0970036520d0.png" 
+                  alt="PDV Legal Card Machine" 
+                  className="w-full max-w-2xl mx-auto object-contain drop-shadow-2xl"
+                  width={400}
+                  height={400}
+                  loading="eager"
+                />
+              </div>
+              
+              {/* Floating elements */}
+              <div className="absolute -top-6 -right-6 w-32 h-32 bg-primary/10 rounded-full mix-blend-screen blur-3xl"></div>
+              <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-primary/5 rounded-full mix-blend-screen blur-3xl"></div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>
