@@ -1,29 +1,5 @@
-# Configurações para todos os user-agents
+
 User-agent: *
-Disallow: /src/
-Disallow: /node_modules/
-Disallow: /.git/
-Disallow: /.vscode/
-Disallow: /.idea/
-Disallow: /dist/
-Disallow: /build/
-Disallow: /*.json
-Disallow: /*.ts
-Disallow: /*.tsx
-Disallow: /*.js
-Disallow: /*.map
-Disallow: /*.css
-Disallow: /*.map
-Sitemap: https://nexsyn.vercel.app/sitemap.xml
+Allow: /
 
-# Configurações específicas para Googlebot
-User-agent: Googlebot
-Disallow: /admin/
-Disallow: /api/
-Sitemap: https://nexsyn.vercel.app/sitemap.xml
-
-# Configurações específicas para Bingbot
-User-agent: Bingbot
-Disallow: /admin/
-Disallow: /api/
-Sitemap: https://nexsyn.vercel.app/sitemap.xml
+Sitemap: https://blog.nexsyn.com.br/sitemap.xml
