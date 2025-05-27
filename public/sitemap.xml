@@ -1,16 +1,90 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://blog.nexsyn.com.br/</loc>
-    <lastmod>2024-05-27</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://blog.nexsyn.com.br</loc>
+    <lastmod>2025-05-27T15:16:08.106Z</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://blog.nexsyn.com.br/blog</loc>
-    <lastmod>2024-05-27</lastmod>
-    <changefreq>daily</changefreq>
+    <loc>https://blog.nexsyn.com.br/blog/como-a-personalizacao-pode-transformar-a-experiencia-dos-clientes-em-restaurantes</loc>
+    <lastmod>2025-05-26T23:57:02.919Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/transformacao-sustentavel-no-foodservice-desafios-e-solucoes-para-restaurantes-modernos</loc>
+    <lastmod>2025-05-26T23:35:18.375Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/aprendizado-de-maquina-e-inteligencia-artificial-o-futuro-da-gestao-interna-e-foodservice</loc>
+    <lastmod>2025-05-23T21:28:34.981Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/como-implementar-uma-gestao-interna-efetiva-com-o-auxilio-da-tecnologia</loc>
+    <lastmod>2025-05-23T21:06:28.505Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/tendencias-e-inovacoes-nos-sistemas-de-pdv-para-2024</loc>
+    <lastmod>2025-05-23T19:28:03.595Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/o-papel-da-inteligencia-artificial-na-otimizacao-do-foodservice</loc>
+    <lastmod>2025-05-20T14:01:58.451Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/transformacao-digital-na-gestao-interna-como-modernizar-processos-e-aumentar-a-eficiencia-v2</loc>
+    <lastmod>2025-05-07T15:14:09.661Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/gestao-interna-digital-estrategias-pequenas-empresas-alavancarem-resultados-atualizado</loc>
+    <lastmod>2025-05-07T15:04:55.690Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/transformando-o-foodservice-com-feedback-dos-clientes-estrategias-e-beneficios</loc>
+    <lastmod>2025-05-07T13:35:02.085Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/cybersecurity-protegendo-seus-dados-na-era-digital</loc>
+    <lastmod>2025-05-06T20:47:38.719Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/ia-revolucionando-atendimento</loc>
+    <lastmod>2023-12-10T09:45:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/gestao-eficiente-restaurantes</loc>
+    <lastmod>2023-11-05T10:15:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.nexsyn.com.br/blog/tecnologia-de-ponta</loc>
+    <lastmod>2023-10-15T14:30:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 </urlset>
