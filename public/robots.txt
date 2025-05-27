@@ -1,5 +1,23 @@
 
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
 
+# Sitemaps
 Sitemap: https://blog.nexsyn.com.br/sitemap.xml
+
+# Host
+Host: blog.nexsyn.com.br
+
+# Allow Google Image
+User-agent: Googlebot-Image
+Allow: /*
+
+# Block AI Crawlers
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
