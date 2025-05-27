@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { viteStaticCopy } from 'vite-plugin-static-copy';
@@ -21,9 +21,9 @@ export default defineConfig(({ mode }) => ({
     reportCompressedSize: false,
     terserOptions: {
       compress: {
+        // Removendo opções problemáticas
         drop_console: mode === 'production',
-        drop_debugger: mode === 'production',
-        pure: ['console.log'],
+        drop_debugger: mode === 'production'
       },
       format: {
         comments: false,
@@ -64,7 +64,14 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react({
       jsxImportSource: '@emotion/react',
-      // Configuração do Babel removida pois não é suportada diretamente pelo plugin SWC
+      babel: {
+        plugins: [
+          // Adiciona o plugin de remoção de console apenas em produção
+          ...(mode === 'production' 
+            ? [['@babel/plugin-transform-remove-console', { exclude: ['error', 'warn'] }]] 
+            : [])
+        ]
+      }
     }),
     mode === 'development' && componentTagger(),
     

@@ -1,54 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/sitemap-style.xsl"?>
-<urlset 
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml"
-  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
-  xmlns:geo="http://www.google.com/geo/schemas/sitemap/1.0"
-  xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0">
-  <!-- Página inicial -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://blog.nexsyn.com.br/</loc>
-    <lastmod>2025-05-27T19:14:58.701Z</lastmod>
+    <loc>https://blog.nexsyn.com.br</loc>
+    <lastmod>2025-05-27T21:32:58.935Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://blog.nexsyn.com.br/og-image.jpg</image:loc>
-      <image:caption>Blog da Nexsyn - Tecnologia e Inovação</image:caption>
-      <image:title>Blog da Nexsyn</image:title>
-    </image:image>
-    <xhtml:link 
-      rel="alternate" 
-      hreflang="pt-BR" 
-      href="https://blog.nexsyn.com.br/"/>
-    <xhtml:link 
-      rel="alternate" 
-      hreflang="en" 
-      href="https://blog.nexsyn.com.br/en/"/>
   </url>
-  <!-- Post do blog: Personalização em Restaurantes -->
   <url>
     <loc>https://blog.nexsyn.com.br/blog/como-a-personalizacao-pode-transformar-a-experiencia-dos-clientes-em-restaurantes</loc>
     <lastmod>2025-05-26T23:57:02.919Z</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://blog.nexsyn.com.br/images/personalizacao-restaurantes.jpg</image:loc>
-      <image:caption>Personalização na experiência de clientes em restaurantes</image:caption>
-      <image:title>Personalização em Restaurantes</image:title>
-    </image:image>
-    <xhtml:link 
-      rel="alternate" 
-      hreflang="pt-BR" 
-      href="https://blog.nexsyn.com.br/blog/como-a-personalizacao-pode-transformar-a-experiencia-dos-clientes-em-restaurantes"/>
   </url>
-  <!-- Post do blog: Transformação Sustentável -->
   <url>
     <loc>https://blog.nexsyn.com.br/blog/transformacao-sustentavel-no-foodservice-desafios-e-solucoes-para-restaurantes-modernos</loc>
     <lastmod>2025-05-26T23:35:18.375Z</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
