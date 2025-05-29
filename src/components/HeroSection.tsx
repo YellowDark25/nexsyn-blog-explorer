@@ -120,7 +120,6 @@ const HeroSection = () => {
             >
               <div className="relative z-10">
                 <picture>
-                  <source srcSet="/lovable-uploads/45346a3d-16d1-4d5a-9158-3dfba5c3c19c.webp" type="image/webp" />
                   <img 
                     src="/lovable-uploads/45346a3d-16d1-4d5a-9158-3dfba5c3c19c.png" 
                     alt="PDV Legal Card Machine" 
