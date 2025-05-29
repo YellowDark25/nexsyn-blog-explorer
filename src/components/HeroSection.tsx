@@ -1,4 +1,5 @@
-
+// HeroSection: Componente de destaque da home, exibe o título, subtítulo e chamada para ação principal.
+// Utiliza props para customização e pode ser reutilizado em outras páginas.
 import React from 'react';
 import { Button } from './ui/button';
 import { ArrowRight, CheckCircle, Zap } from 'lucide-react';
@@ -118,14 +119,17 @@ const HeroSection = () => {
               }}
             >
               <div className="relative z-10">
-                <img 
-                  src="/lovable-uploads/934a6d72-cf72-4481-8c59-0970036520d0.png" 
-                  alt="PDV Legal Card Machine" 
-                  className="w-full max-w-2xl mx-auto object-contain drop-shadow-2xl"
-                  width={400}
-                  height={400}
-                  loading="eager"
-                />
+                <picture>
+                  <source srcSet="/lovable-uploads/45346a3d-16d1-4d5a-9158-3dfba5c3c19c.webp" type="image/webp" />
+                  <img 
+                    src="/lovable-uploads/45346a3d-16d1-4d5a-9158-3dfba5c3c19c.png" 
+                    alt="PDV Legal Card Machine" 
+                    className="w-full max-w-2xl mx-auto object-contain drop-shadow-2xl"
+                    width={400}
+                    height={400}
+                    loading="eager"
+                  />
+                </picture>
               </div>
               
               {/* Floating elements */}

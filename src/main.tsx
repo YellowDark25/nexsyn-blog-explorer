@@ -1,8 +1,9 @@
-
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
+import { Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
 
 // Global error handler for async response errors (commonly caused by browser extensions)
 const setupGlobalErrorHandling = () => {
@@ -31,6 +32,7 @@ const setupGlobalErrorHandling = () => {
 
 // Initialize error handling
 setupGlobalErrorHandling();
+
 
 // Render the app
 createRoot(document.getElementById("root")!).render(
