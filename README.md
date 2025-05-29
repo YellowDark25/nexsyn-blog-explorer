@@ -71,3 +71,24 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+# Instruções Rápidas
+
+## Rodando o Projeto
+
+```bash
+npm install
+npm run dev
+```
+
+Acesse: http://localhost:5173
+
+## Rodando os Testes
+
+```bash
+npm run test
+```
+
+## Error Tracking
+
+O projeto está preparado para integração com Sentry. Para ativar, configure a variável DSN no arquivo `src/main.tsx` com sua chave do Sentry.

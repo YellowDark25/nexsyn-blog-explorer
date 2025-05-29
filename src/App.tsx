@@ -1,21 +1,16 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Analytics } from "@vercel/analytics/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import { useState, useEffect } from "react";
-import Home from "./pages/Home";
-import BlogPage from "./pages/BlogPage";
-import PostDetail from "./pages/PostDetail";
-import NotFound from "./pages/NotFound";
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminChat from "./pages/admin/AdminChat";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AdminProvider } from "./contexts/AdminContext";
 import IntegrationsProvider from "./components/integrations/IntegrationsProvider";
 import ScrollToTop from "./components/ScrollToTop";
+import banner from './assets/banner.png';
 // Create a query client with improved configuration
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,6 +25,14 @@ const queryClient = new QueryClient({
 // Analytics configuration
 const GOOGLE_ANALYTICS_ID = "G-XXXXXXXXXX"; // Replace with your actual GA ID when ready
 
+// Lazy load das páginas
+const Home = lazy(() => import("./pages/Home"));
+const BlogPage = lazy(() => import("./pages/BlogPage"));
+const PostDetail = lazy(() => import("./pages/PostDetail"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminChat = lazy(() => import("./pages/admin/AdminChat"));
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,6 +44,11 @@ const App = () => {
     }, 800);
     
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    import('./pages/BlogPage');
+    import('./pages/PostDetail');
   }, []);
 
   if (isLoading) {
@@ -76,27 +84,27 @@ const App = () => {
             <Sonner closeButton position="bottom-right" />
             <ScrollToTop />
             <Analytics />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:category" element={<BlogPage />} />
-              <Route path="/blog/search" element={<BlogPage />} />
-              <Route path="/posts/:slug" element={<PostDetail />} />
-              
-              {/* Admin Routes */}
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route 
-                path="/admin/chat" 
-                element={
-                  <ProtectedRoute>
-                    <AdminChat />
-                  </ProtectedRoute>
-                } 
-              />
-              
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Suspense fallback={<div className="flex items-center justify-center h-screen">Carregando...</div>}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/blog/:category" element={<BlogPage />} />
+                <Route path="/blog/search" element={<BlogPage />} />
+                <Route path="/posts/:slug" element={<PostDetail />} />
+                {/* Admin Routes */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route 
+                  path="/admin/chat" 
+                  element={
+                    <ProtectedRoute>
+                      <AdminChat />
+                    </ProtectedRoute>
+                  } 
+                />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </TooltipProvider>
         </IntegrationsProvider>
       </AdminProvider>
