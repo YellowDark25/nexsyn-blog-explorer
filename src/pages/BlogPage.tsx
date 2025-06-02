@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -104,22 +103,30 @@ const BlogPage: React.FC = () => {
     
       <Navbar />
       
-      <div className="bg-muted py-8 md:py-12">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">{getPageTitle()}</h1>
-            
+      <div className="relative overflow-hidden py-12 md:py-20 bg-gradient-to-br from-[#0A192F] via-[#13294B] to-[#1B314F] shadow-lg mb-8">
+        <div className="absolute inset-0 pointer-events-none select-none opacity-20">
+          {/* Elementos decorativos: círculos e gradientes */}
+          <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/20 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-0 right-0 w-64 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center max-w-2xl mx-auto flex flex-col items-center gap-4">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/20 text-primary font-semibold text-xs tracking-widest uppercase mb-2 shadow-sm">Bem-vindo ao Blog</span>
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <svg width="36" height="36" fill="none" viewBox="0 0 36 36" className="text-primary"><circle cx="18" cy="18" r="18" fill="currentColor" fillOpacity="0.15"/><path d="M18 10v8l6 3" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <h1 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow-lg">{getPageTitle()}</h1>
+            </div>
             {searchQuery ? (
-              <p className="text-muted-foreground">
+              <p className="text-lg text-muted-foreground/90 font-medium">
                 Mostrando resultados para "{searchQuery}"
                 {totalPosts > 0 && <span> ({totalPosts} {totalPosts === 1 ? 'resultado' : 'resultados'})</span>}
               </p>
             ) : category ? (
-              <p className="text-muted-foreground">
+              <p className="text-lg text-muted-foreground/90 font-medium">
                 Artigos relacionados à categoria selecionada
               </p>
             ) : (
-              <p className="text-muted-foreground">
+              <p className="text-lg text-muted-foreground/90 font-medium">
                 Explore nosso conteúdo sobre gestão, tecnologia e inovação
               </p>
             )}
