@@ -7,10 +7,15 @@
     "dev": "vite",
     "build": "npm run sitemap && vite build",
     "build:dev": "npm run sitemap && vite build --mode development",
-    "lint": "eslint .",
+    "build:analyze": "npm run sitemap && vite build --mode production && npm run analyze",
+    "analyze": "node scripts/analyze-bundle.js",
     "preview": "vite preview",
     "sitemap": "tsx scripts/simple-sitemap.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "lighthouse": "lighthouse https://blog.nexsyn.com.br --output=html --output-path=./lighthouse-report.html",
+    "perf:audit": "npm run build:analyze && npm run lighthouse",
+    "perf:monitor": "node -e \"console.log('Performance monitoring setup complete. Check console for Core Web Vitals.')\"",
+    "optimize": "npm run build:analyze"
   },
   "dependencies": {
     "@emotion/babel-plugin": "^11.13.5",

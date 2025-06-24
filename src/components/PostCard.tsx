@@ -1,31 +1,29 @@
-
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { format, parseISO } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { Calendar, Tag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Post } from '@/types/Post';
-import { slugToReadable } from '@/utils/formatUtils';
-import { Calendar, Tag, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { formatDate, slugToReadable } from '@/utils/formatUtils';
+import OptimizedImage from './OptimizedImage';
 
 interface PostCardProps {
   post: Post;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const formattedDate = format(parseISO(post.data_publicacao), 'dd MMM yyyy', { locale: ptBR });
+const PostCard: React.FC<PostCardProps> = memo(({ post }) => {
+  const formattedDate = formatDate(post.data_publicacao);
   const formattedCategory = slugToReadable(post.categoria);
-  
+
   return (
-    <motion.article 
-      className="group bg-card rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 h-full flex flex-col border border-border/20 hover:border-primary/20 relative"
-      whileHover={{ boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="group bg-card rounded-xl h-full flex flex-col border border-border/20 shadow-sm hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 overflow-hidden hover:-translate-y-1"
+      whileHover={{ y: -4 }}
     >
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
-      
-      {/* Image container */}
+      {/* Post image */}
       <Link to={`/posts/${post.slug}`} className="block overflow-hidden relative">
         <div className="aspect-video overflow-hidden relative">
           {/* Gradient overlay */}
@@ -41,16 +39,15 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             </Badge>
           </div>
           
-          {/* Post image */}
-          <motion.img 
-            src={post.imagem_destaque} 
+          {/* Optimized post image */}
+          <OptimizedImage
+            src={post.imagem_destaque}
             alt={post.titulo}
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-            initial={{ scale: 1 }}
-            whileHover={{ scale: 1.1 }}
-            loading="lazy"
             width={600}
             height={338}
+            className="w-full h-full"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            quality={85}
           />
         </div>
       </Link>
@@ -90,20 +87,31 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </p>
         
         {/* Read more */}
-        <div className="mt-auto pt-4 border-t border-border/10">
+        <div className="mt-auto">
           <Link 
             to={`/posts/${post.slug}`}
-            className="inline-flex items-center text-sm font-medium text-primary group w-fit"
+            className="inline-flex items-center font-medium text-primary hover:text-primary/80 transition-colors group/link"
+            aria-label={`Leia mais sobre ${post.titulo}`}
           >
-            <span className="relative after:absolute after:content-[''] after:bottom-0 after:left-0 after:w-full after:h-px after:bg-primary after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100 group-hover:after:origin-left">
-              Continuar lendo
-            </span>
-            <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+            Leia mais
+            <motion.svg 
+              className="ml-2 h-4 w-4" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+              initial={{ x: 0 }}
+              whileHover={{ x: 4 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </motion.svg>
           </Link>
         </div>
       </div>
-    </motion.article>
+    </motion.div>
   );
-};
+});
+
+PostCard.displayName = 'PostCard';
 
 export default PostCard;
