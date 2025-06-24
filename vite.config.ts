@@ -20,11 +20,31 @@ export default defineConfig(({ mode }) => ({
     imagetools(),
     mode === 'development' && componentTagger(),
     
-    // PWA Plugin for caching and offline support
+    // PWA Plugin com configuração corrigida
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['favicon-32x32-CtHxdSWX.ico', 'nexsyn-logo.png'],
+      manifest: {
+        name: 'NEXSYN Blog',
+        short_name: 'NEXSYN',
+        description: 'Blog NEXSYN - Acompanhe as últimas notícias e artigos sobre gestão, tecnologia e inovação',
+        theme_color: '#1a365d',
+        background_color: '#ffffff',
+        display: 'standalone',
+        scope: '/',
+        start_url: '/',
+        icons: [
+          {
+            src: 'favicon-32x32-CtHxdSWX.ico',
+            sizes: '32x32',
+            type: 'image/x-icon'
+          }
+        ]
+      },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/images\.unsplash\.com\/.*/i,
@@ -33,10 +53,7 @@ export default defineConfig(({ mode }) => ({
               cacheName: 'unsplash-images',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              },
-              cacheKeyWillBeUsed: async ({ request }) => {
-                return `${request.url}?w=800&q=80`;
+                maxAgeSeconds: 60 * 60 * 24 * 30
               }
             }
           },
@@ -44,7 +61,7 @@ export default defineConfig(({ mode }) => ({
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'google-fonts-stylesheets',
+              cacheName: 'google-fonts-stylesheets'
             }
           },
           {
@@ -54,24 +71,9 @@ export default defineConfig(({ mode }) => ({
               cacheName: 'google-fonts-webfonts',
               expiration: {
                 maxEntries: 30,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+                maxAgeSeconds: 60 * 60 * 24 * 365
               }
             }
-          }
-        ]
-      },
-      manifest: {
-        name: 'NEXSYN Blog',
-        short_name: 'NEXSYN',
-        description: 'Blog NEXSYN - Acompanhe as últimas notícias e artigos sobre gestão, tecnologia e inovação',
-        theme_color: '#1a365d',
-        background_color: '#ffffff',
-        display: 'standalone',
-        icons: [
-          {
-            src: '/favicon-32x32-CtHxdSWX.ico',
-            sizes: '32x32',
-            type: 'image/x-icon'
           }
         ]
       }
