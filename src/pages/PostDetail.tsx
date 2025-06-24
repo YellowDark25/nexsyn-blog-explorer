@@ -178,10 +178,6 @@ const PostDetail = () => {
                 <div className="text-center sm:text-left">
                   <h4 className="text-lg font-bold text-foreground">Kleverson Silva Jara</h4>
                   <p className="text-muted-foreground mb-3">Especialista em Tecnologia e Inovação</p>
-                  <p className="text-sm text-muted-foreground/80">
-                    Apaixonado por transformar ideias em soluções tecnológicas inovadoras. 
-                    Compartilhando conhecimentos e experiências no blog para ajudar outros profissionais de TI.
-                  </p>
                 </div>
               </div>
             </div>
