@@ -1,5 +1,32 @@
-
 User-agent: *
 Allow: /
 
+# Sitemap
 Sitemap: https://blog.nexsyn.com.br/sitemap.xml
+
+# Principais páginas para indexação prioritária
+Allow: /blog/
+Allow: /posts/
+Allow: /
+
+# Diretórios permitidos
+Allow: /public/
+Allow: /lovable-uploads/
+
+# Bloquear arquivos administrativos e de desenvolvimento
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /scripts/
+
+# Permitir bots específicos
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl-delay para evitar sobrecarga
+Crawl-delay: 1
